@@ -8,18 +8,45 @@
 
 /* Begin PBXBuildFile section */
 		910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */; };
-		910E11C72849AD5700035B59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11C62849AD5700035B59 /* ContentView.swift */; };
+		910E11C72849AD5700035B59 /* CreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */; };
 		910E11C92849AD5900035B59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910E11C82849AD5900035B59 /* Assets.xcassets */; };
 		910E11CC2849AD5900035B59 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910E11CB2849AD5900035B59 /* Preview Assets.xcassets */; };
+		910E11D52849AE2900035B59 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 910E11D42849AE2900035B59 /* ComposableArchitecture */; };
+		910E11D82849AEBF00035B59 /* AcitivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11D72849AEBF00035B59 /* AcitivityIndicator.swift */; };
+		910E11DB2849AF9A00035B59 /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11DA2849AF9A00035B59 /* Notification+Extension.swift */; };
+		910E11DD2849AFF100035B59 /* SpeedyDiskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11DC2849AFF100035B59 /* SpeedyDiskState.swift */; };
+		910E11DF2849B04700035B59 /* SpeedyDiskAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11DE2849B04700035B59 /* SpeedyDiskAction.swift */; };
+		910E11E12849B0CB00035B59 /* SpeedyDiskReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11E02849B0CB00035B59 /* SpeedyDiskReducer.swift */; };
+		910E11E32849B22800035B59 /* SpeedyDiskEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11E22849B22800035B59 /* SpeedyDiskEnvironment.swift */; };
+		910E11E52849B28000035B59 /* SpeedyDiskVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11E42849B28000035B59 /* SpeedyDiskVolume.swift */; };
+		910E11E72849B2C000035B59 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11E62849B2C000035B59 /* Constants.swift */; };
+		910E11E92849B33C00035B59 /* SpeedyDiskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11E82849B33C00035B59 /* SpeedyDiskManager.swift */; };
+		910E11EB2849B43A00035B59 /* SpeedyDiskMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EA2849B43A00035B59 /* SpeedyDiskMenuItem.swift */; };
+		910E11ED2849B59700035B59 /* SpeedyDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EC2849B59700035B59 /* SpeedyDiskController.swift */; };
+		910E11EF2849B67800035B59 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EE2849B67800035B59 /* WindowManager.swift */; };
+		910E11F12849B97B00035B59 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11F02849B97B00035B59 /* View+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		910E11C12849AD5700035B59 /* SpeedyDisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedyDisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskApp.swift; sourceTree = "<group>"; };
-		910E11C62849AD5700035B59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSpeedyDiskView.swift; sourceTree = "<group>"; };
 		910E11C82849AD5900035B59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		910E11CB2849AD5900035B59 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		910E11CD2849AD5900035B59 /* SpeedyDisk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpeedyDisk.entitlements; sourceTree = "<group>"; };
+		910E11D72849AEBF00035B59 /* AcitivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcitivityIndicator.swift; sourceTree = "<group>"; };
+		910E11DA2849AF9A00035B59 /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
+		910E11DC2849AFF100035B59 /* SpeedyDiskState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskState.swift; sourceTree = "<group>"; };
+		910E11DE2849B04700035B59 /* SpeedyDiskAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskAction.swift; sourceTree = "<group>"; };
+		910E11E02849B0CB00035B59 /* SpeedyDiskReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskReducer.swift; sourceTree = "<group>"; };
+		910E11E22849B22800035B59 /* SpeedyDiskEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskEnvironment.swift; sourceTree = "<group>"; };
+		910E11E42849B28000035B59 /* SpeedyDiskVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskVolume.swift; sourceTree = "<group>"; };
+		910E11E62849B2C000035B59 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		910E11E82849B33C00035B59 /* SpeedyDiskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskManager.swift; sourceTree = "<group>"; };
+		910E11EA2849B43A00035B59 /* SpeedyDiskMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskMenuItem.swift; sourceTree = "<group>"; };
+		910E11EC2849B59700035B59 /* SpeedyDiskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskController.swift; sourceTree = "<group>"; };
+		910E11EE2849B67800035B59 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		910E11F02849B97B00035B59 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				910E11D52849AE2900035B59 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,11 +80,22 @@
 		910E11C32849AD5700035B59 /* SpeedyDisk */ = {
 			isa = PBXGroup;
 			children = (
+				910E11D92849AF8500035B59 /* Extensions */,
+				910E11D62849AE3500035B59 /* Views */,
 				910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */,
-				910E11C62849AD5700035B59 /* ContentView.swift */,
 				910E11C82849AD5900035B59 /* Assets.xcassets */,
 				910E11CD2849AD5900035B59 /* SpeedyDisk.entitlements */,
 				910E11CA2849AD5900035B59 /* Preview Content */,
+				910E11DC2849AFF100035B59 /* SpeedyDiskState.swift */,
+				910E11DE2849B04700035B59 /* SpeedyDiskAction.swift */,
+				910E11E02849B0CB00035B59 /* SpeedyDiskReducer.swift */,
+				910E11E22849B22800035B59 /* SpeedyDiskEnvironment.swift */,
+				910E11E42849B28000035B59 /* SpeedyDiskVolume.swift */,
+				910E11E62849B2C000035B59 /* Constants.swift */,
+				910E11E82849B33C00035B59 /* SpeedyDiskManager.swift */,
+				910E11EA2849B43A00035B59 /* SpeedyDiskMenuItem.swift */,
+				910E11EC2849B59700035B59 /* SpeedyDiskController.swift */,
+				910E11EE2849B67800035B59 /* WindowManager.swift */,
 			);
 			path = SpeedyDisk;
 			sourceTree = "<group>";
@@ -67,6 +106,24 @@
 				910E11CB2849AD5900035B59 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		910E11D62849AE3500035B59 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */,
+				910E11D72849AEBF00035B59 /* AcitivityIndicator.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		910E11D92849AF8500035B59 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				910E11DA2849AF9A00035B59 /* Notification+Extension.swift */,
+				910E11F02849B97B00035B59 /* View+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -85,6 +142,9 @@
 			dependencies = (
 			);
 			name = SpeedyDisk;
+			packageProductDependencies = (
+				910E11D42849AE2900035B59 /* ComposableArchitecture */,
+			);
 			productName = SpeedyDisk;
 			productReference = 910E11C12849AD5700035B59 /* SpeedyDisk.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +173,9 @@
 				Base,
 			);
 			mainGroup = 910E11B82849AD5700035B59;
+			packageReferences = (
+				910E11D32849AE2900035B59 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 910E11C22849AD5700035B59 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -139,8 +202,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				910E11C72849AD5700035B59 /* ContentView.swift in Sources */,
+				910E11E32849B22800035B59 /* SpeedyDiskEnvironment.swift in Sources */,
+				910E11D82849AEBF00035B59 /* AcitivityIndicator.swift in Sources */,
+				910E11C72849AD5700035B59 /* CreateSpeedyDiskView.swift in Sources */,
+				910E11E12849B0CB00035B59 /* SpeedyDiskReducer.swift in Sources */,
+				910E11E52849B28000035B59 /* SpeedyDiskVolume.swift in Sources */,
+				910E11E72849B2C000035B59 /* Constants.swift in Sources */,
+				910E11DB2849AF9A00035B59 /* Notification+Extension.swift in Sources */,
+				910E11F12849B97B00035B59 /* View+Extension.swift in Sources */,
 				910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */,
+				910E11EB2849B43A00035B59 /* SpeedyDiskMenuItem.swift in Sources */,
+				910E11EF2849B67800035B59 /* WindowManager.swift in Sources */,
+				910E11DF2849B04700035B59 /* SpeedyDiskAction.swift in Sources */,
+				910E11E92849B33C00035B59 /* SpeedyDiskManager.swift in Sources */,
+				910E11ED2849B59700035B59 /* SpeedyDiskController.swift in Sources */,
+				910E11DD2849AFF100035B59 /* SpeedyDiskState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +412,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		910E11D32849AE2900035B59 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		910E11D42849AE2900035B59 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 910E11D32849AE2900035B59 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 910E11B92849AD5700035B59 /* Project object */;
 }

@@ -22,7 +22,7 @@ struct RAMdiskApp: App {
 }
 
 // Our AppDelegae will handle our menu
-class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBar: SpeedyDiskController!
     private let store = Store(
             initialState: SpeedyDiskState(),
@@ -49,6 +49,5 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         if isRunning {
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
-
     }
 }

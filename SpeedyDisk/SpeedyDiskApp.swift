@@ -23,17 +23,13 @@ struct RAMdiskApp: App {
 
 // Our AppDelegae will handle our menu
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    var statusBar: SpeedyDiskController!
+    private var statusBar: SpeedyDiskController!
     private let store = Store(
             initialState: SpeedyDiskState(),
             reducer: speedyDiskReducer,
             environment: .init())
     var viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>!
     
-    // The NSStatusBar manages a collection of status items displayed within a system-wide menu bar.
-    //lazy var statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    // A new menu instance ready to add items to
-
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusBar = SpeedyDiskController(store: store)
         viewStore = ViewStore(store)

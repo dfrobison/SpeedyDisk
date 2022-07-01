@@ -18,4 +18,8 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case openCreateSpeedyDiskWindow
     case ejectSpeedyDisksWithName(names: [String], recreate: Bool)
     case diskEjected(path: String?)
+    case deleteVolume(volume: SpeedyDiskVolume)
+    case toggleAutoCreate(volume: SpeedyDiskVolume)
+    case toggleWarnOnEject(volume: SpeedyDiskVolume)
+    case toggleSpotLight(volume: SpeedyDiskVolume)
 }

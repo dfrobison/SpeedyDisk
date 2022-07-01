@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SpeedyDiskVolume: Codable, Identifiable {
+struct SpeedyDiskVolume: Equatable, Codable, Identifiable {
     var id = UUID()
     var name: String = ""
     var size: UInt = 64
@@ -16,9 +16,14 @@ struct SpeedyDiskVolume: Codable, Identifiable {
     var warnOnEject: Bool = false
     var folders: [String] = []
     
+    mutating func toggleAutoCreate() {
+        autoCreate.toggle()
+    }
+    
     func path() -> String {
         "/Volumes/\(name)"
     }
+    
     
     func URL() -> URL {
         return NSURL.fileURL(withPath: self.path())

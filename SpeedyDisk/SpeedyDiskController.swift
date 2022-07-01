@@ -111,6 +111,18 @@ class SpeedyDiskController {
         return true
     }
     
+    func confirmDelete(volume: SpeedyDiskVolume) -> Bool {
+        if (volume.showWarning()) {
+            let alert = NSAlert()
+            alert.messageText = NSLocalizedString("Are you sure you want to delete? Volume contains files.", comment: "")
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            return alert.runModal() == .alertFirstButtonReturn
+        }
+        return true
+    }
+    
     private func rebuild() {
         rebuildSpeedyDiskMenu()
         rebuildAutoCreateMenuItem()
@@ -141,6 +153,11 @@ class SpeedyDiskController {
             }, ejectHandler: {
                 if self.confirmEject(volume: volume) {
                     self.viewStore.send(.ejectSpeedyDisksWithName(names: [volume.name], recreate: false))
+                }
+                self.statusMenu.cancelTracking()
+            }, deleteHandler: {
+                if self.confirmDelete(volume: volume) {
+                    self.viewStore.send(.deleteVolume(volume: volume))
                 }
                 self.statusMenu.cancelTracking()
             })

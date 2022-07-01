@@ -12,20 +12,23 @@ class SpeedyDiskMenuItem: NSMenuItem {
     let clickHandler: () -> Void
     let recreateHandler: () -> Void
     let ejectHandler: () -> Void
+    let deleteHandler: () -> Void
     
     required init(title string: String,
                   action selector: Selector?,
                   keyEquivalent charCode: String,
                   clickHandler: @escaping () -> Void,
                   recreateHandler: @escaping () -> Void,
-                  ejectHandler: @escaping () -> Void) {
+                  ejectHandler: @escaping () -> Void,
+                  deleteHandler: @escaping () -> Void) {
         self.clickHandler = clickHandler
         self.recreateHandler = recreateHandler
         self.ejectHandler = ejectHandler
+        self.deleteHandler = deleteHandler
         
         super.init(title: string, action: selector, keyEquivalent: charCode)
         
-        let view = NSView.init(frame: NSRect(x: 0, y: 0, width: 150, height: 25))
+        let view = NSView.init(frame: NSRect(x: 0, y: 0, width: 168, height: 25))
 
         let label: NSButton = {
             let button = NSButton(frame: NSRect(x: 20, y: 2.5, width: 90, height: 20))
@@ -60,6 +63,17 @@ class SpeedyDiskMenuItem: NSMenuItem {
         }()
         view.addSubview(eject)
 
+        let delete: NSButton = {
+            let button = NSButton(frame: NSRect(x: 150, y: 5, width: 15, height: 15))
+            button.action = #selector(onDelete(sender:))
+            button.target = self
+            button.image = NSImage(systemSymbolName: "x.circle", accessibilityDescription: nil)
+            button.wantsLayer = true
+            button.isBordered = false
+            return button
+        }()
+        view.addSubview(delete)
+        
         self.view = view
     }
     
@@ -78,5 +92,9 @@ class SpeedyDiskMenuItem: NSMenuItem {
     
     @objc func onEject(sender: NSButton) {
         self.ejectHandler()
+    }
+    
+    @objc func onDelete(sender: NSButton) {
+        self.deleteHandler()
     }
 }

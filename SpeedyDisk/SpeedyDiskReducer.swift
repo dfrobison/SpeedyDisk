@@ -22,7 +22,6 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
         
     case .ejectSpeedyDisksWithName(let names, let recreate):
         SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: names, recreate: recreate)
-        SpeedyDiskManager.shared.saveAutoCreateVolumes(volumes: state.autoCreateVolumes.map {$0 })
         state.rebuildMenu = true
         return .none
         
@@ -102,6 +101,23 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
             return .none
         }
+        case .deleteVolume(let volume):
+            SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: [volume.name], recreate: false)
+            SpeedyDiskManager.shared.deleteVolume(volume: volume)
+            state.rebuildMenu = true
+            return .none
+            
+        case .toggleAutoCreate(let volume):
+            SpeedyDiskManager.shared.toggleAutoCreate(volume: volume)
+            return .none
+            
+        case .toggleWarnOnEject(let volume):
+            SpeedyDiskManager.shared.toggleWarnOnEject(volume: volume)
+            return .none
+            
+        case .toggleSpotLight(let volume):
+            SpeedyDiskManager.shared.toggleSpotLight(volume: volume)
+            return .none
     }
 }
 .binding()

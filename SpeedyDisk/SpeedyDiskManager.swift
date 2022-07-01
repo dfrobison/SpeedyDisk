@@ -27,14 +27,16 @@ class SpeedyDiskManager {
                     }
                 }
             }
+            
+            if !volumes.isEmpty {
+                volumes.sort(by: \.name)
+            }
         }
         
         // AutoCreate any saved SpeedyDisks
         for volume in self.getAutoCreateVolumes() {
             self.createSpeedyDisk(volume: volume) { _ in }
         }
-        
-        volumes.sort(by: \.name)
     }
     
     // MARK: - SpeedyDiskManager API
@@ -60,6 +62,26 @@ class SpeedyDiskManager {
         }
         
         return autoCreateVolumes
+    }
+    
+    func toggleWarnOnEject(volume: SpeedyDiskVolume) {
+        self.volumes[id: volume.id]?.warnOnEject.toggle()
+    }
+    
+    func toggleSpotLight(volume: SpeedyDiskVolume) {
+        self.volumes[id: volume.id]?.spotLight.toggle()
+    }
+    
+    func toggleAutoCreate(volume: SpeedyDiskVolume) {
+        if self.volumes.contains(volume) {
+            self.volumes[id: volume.id]?.autoCreate.toggle()
+            self.saveAutoCreateVolumes(volumes: self.volumes.filter {$0.autoCreate})
+        }
+    }
+    
+    func deleteVolume(volume: SpeedyDiskVolume) {
+        self.volumes.remove(volume)
+        self.saveAutoCreateVolumes(volumes: self.volumes.filter {$0.autoCreate})
     }
     
     func addAutoCreateVolume(volume: SpeedyDiskVolume) {

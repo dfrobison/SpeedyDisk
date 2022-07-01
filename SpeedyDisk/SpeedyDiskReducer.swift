@@ -15,13 +15,14 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
         return .none
         
     case .diskEjected(let path):
-        if let path = path, SpeedyDiskManager.shared.diskEjected(path: path) {
-            state.rebuildMenu = true
+        if let path = path, let volume = SpeedyDiskManager.shared.diskEjected(path: path) {
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(names: [volume.name], recreate: false))
         }
         return .none
         
     case .ejectSpeedyDisksWithName(let names, let recreate):
         SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: names, recreate: recreate)
+        SpeedyDiskManager.shared.saveAutoCreateVolumes(volumes: state.autoCreateVolumes.map {$0 })
         state.rebuildMenu = true
         return .none
         

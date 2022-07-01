@@ -49,7 +49,8 @@ class SpeedyDiskManager {
                     let folders = vol["folders"] as? [String] ?? []
                     
                     let volume = SpeedyDiskVolume(name: name,
-                                               size: size,
+                                                  size: size,
+                                                  autoCreate: true,
                                                spotLight: spotLight,
                                                warnOnEject: warnOnEject,
                                                folders: folders)
@@ -161,14 +162,14 @@ class SpeedyDiskManager {
      diskEjected takes a path and checks to see if it's a SpeedyDisk
      If it is, remove it from the volumes and return true so we can refresh the menubar
      */
-    func diskEjected(path: String) -> Bool {
+    func diskEjected(path: String) -> SpeedyDiskVolume? {
+
         for volume in self.volumes {
             if volume.path() == path {
-                self.volumes.remove(volume)
-                return true
+                return volume
             }
         }
-        return false
+        return nil
     }
     
     // MARK: - Helper functions
@@ -220,8 +221,14 @@ extension Sequence {
 
 extension IdentifiedArray {
     mutating func sort<T: Comparable>(by keyPath: KeyPath<Element, T>) {
-        return sort { a, b in
-            return a[keyPath: keyPath] < b[keyPath: keyPath]
+        
+        if self.count < 2 {
+            return
         }
+
+        sort { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
+//        sort { a, b in
+//            return a[keyPath: keyPath] < b[keyPath: keyPath]
+//        }
     }
 }

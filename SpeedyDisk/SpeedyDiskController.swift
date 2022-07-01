@@ -17,10 +17,12 @@ class SpeedyDiskController {
     private var cancellable: AnyCancellable?
     private var statusItem = NSStatusBar.system.statusItem(withLength: 28.0)
     private var statusMenu = NSMenu()
-    private var currentTmpDisksMenu: NSMenu = NSMenu()
+    private var currentSpeedyDiskMenu: NSMenu = NSMenu()
     private let launcherAppId = "com.imothee.TmpDiskLauncher"
     private let windowManager: WindowManager
-    private let currentTmpDisksItem = NSMenuItem(title: NSLocalizedString("Current Speedy Disks", comment: ""), action: nil, keyEquivalent: "")
+    private let currentSpeedyDisksItem = NSMenuItem(title: NSLocalizedString("Current Speedy Disks", comment: ""), action: nil, keyEquivalent: "")
+    private let autoCreateManagerItem = NSMenuItem(title: NSLocalizedString("AutoCreate Manager", comment: ""), action: #selector(autoCreateManager(sender:)), keyEquivalent: "")
+    private let recreateAllItem = NSMenuItem(title: NSLocalizedString("Recreate All", comment: ""), action: #selector(recreateAll(sender:)), keyEquivalent: "")
     
     init(store: Store<SpeedyDiskState, SpeedyDiskAction>) {
         self.store = store
@@ -40,28 +42,21 @@ class SpeedyDiskController {
             statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
         }
         
-        // New TmpDisk section
-        let newRAMDiskItem = NSMenuItem(title: NSLocalizedString("New Speedy Disk", comment: ""), action: #selector(newRAMDisk(sender:)), keyEquivalent: "n")
-        newRAMDiskItem.target = self
-        statusMenu.addItem(newRAMDiskItem)
-        
-        // Rebuild the current TmpDisk
-        buildCurrentTmpDiskMenu()
+        // New SpeedDisk section
+        let newSpeedyDiskItem = NSMenuItem(title: NSLocalizedString("New Speedy Disk", comment: ""), action: #selector(newRAMDisk(sender:)), keyEquivalent: "n")
+        newSpeedyDiskItem.target = self
+        statusMenu.addItem(newSpeedyDiskItem)
         
         statusMenu.addItem(NSMenuItem.separator())
         
-        // Existing TmpDisk section
-        statusMenu.addItem(currentTmpDisksItem)
-        statusMenu.setSubmenu(self.currentTmpDisksMenu, for: currentTmpDisksItem)
+        // Existing SpeedDisk section
+        statusMenu.addItem(currentSpeedyDisksItem)
+        statusMenu.setSubmenu(self.currentSpeedyDiskMenu, for: currentSpeedyDisksItem)
         
         // Recreate All
-        let recreateAllItem = NSMenuItem(title: NSLocalizedString("Recreate All", comment: ""), action: #selector(recreateAll(sender:)), keyEquivalent: "")
-        recreateAllItem.target = self
         statusMenu.addItem(recreateAllItem)
         
         // AutocreateManager
-        let autoCreateManagerItem = NSMenuItem(title: NSLocalizedString("AutoCreate Manager", comment: ""), action: #selector(autoCreateManager(sender:)), keyEquivalent: "")
-        autoCreateManagerItem.target = self
         statusMenu.addItem(autoCreateManagerItem)
         
         // Separator
@@ -71,6 +66,7 @@ class SpeedyDiskController {
         let startLoginItem = NSMenuItem(title: NSLocalizedString("Always Start on Login", comment: ""), action: #selector(toggleStartOnLogin(sender:)), keyEquivalent: "")
         startLoginItem.target = self
         startLoginItem.state = startOnLogin ? .on : .off
+        startLoginItem.isEnabled = false
         
         statusMenu.addItem(startLoginItem)
         
@@ -85,10 +81,14 @@ class SpeedyDiskController {
         // Add the menu to the item
         statusItem.menu = statusMenu
         
+        // Rebuild
+        rebuildSpeedyDiskMenu()
+        rebuildAutoCreateMenuItem()
+        
         cancellable = viewStore.publisher.rebuildMenu
             .sink(receiveValue: { rebuildDiskMenu in
                 if rebuildDiskMenu {
-                    self.buildCurrentTmpDiskMenu()
+                    self.rebuild()
                 }
             })
     }
@@ -111,8 +111,23 @@ class SpeedyDiskController {
         return true
     }
     
-    private func buildCurrentTmpDiskMenu() {
-        self.currentTmpDisksMenu.removeAllItems()
+    private func rebuild() {
+        rebuildSpeedyDiskMenu()
+        rebuildAutoCreateMenuItem()
+        rebuildRecreateAllMenuItem()
+        viewStore.send(.rebuildMenuCompeleted)
+    }
+    
+    private func rebuildAutoCreateMenuItem() {
+        autoCreateManagerItem.target = viewStore.autoCreateVolumes.count > 0 ? self : nil
+    }
+    
+    private func rebuildRecreateAllMenuItem() {
+        recreateAllItem.target = viewStore.volumes.count > 0 ? self : nil
+    }
+    
+    private func rebuildSpeedyDiskMenu() {
+        self.currentSpeedyDiskMenu.removeAllItems()
         
         for volume in viewStore.volumes {
             let volumeItem = SpeedyDiskMenuItem.init(title: volume.name, action: nil, keyEquivalent: "", clickHandler: {
@@ -130,11 +145,10 @@ class SpeedyDiskController {
                 self.statusMenu.cancelTracking()
             })
             volumeItem.target = self
-            self.currentTmpDisksMenu.addItem(volumeItem)
+            self.currentSpeedyDiskMenu.addItem(volumeItem)
         }
         
-        currentTmpDisksItem.isEnabled = viewStore.count > 0
-        viewStore.send(.rebuildMenuCompeleted)
+        currentSpeedyDisksItem.isEnabled = viewStore.count > 0
     }
     
     // MARK: - Actions

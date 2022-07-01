@@ -25,6 +25,7 @@
 		910E11ED2849B59700035B59 /* SpeedyDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EC2849B59700035B59 /* SpeedyDiskController.swift */; };
 		910E11EF2849B67800035B59 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EE2849B67800035B59 /* WindowManager.swift */; };
 		910E11F12849B97B00035B59 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11F02849B97B00035B59 /* View+Extension.swift */; };
+		91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		910E11EC2849B59700035B59 /* SpeedyDiskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskController.swift; sourceTree = "<group>"; };
 		910E11EE2849B67800035B59 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		910E11F02849B97B00035B59 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCreateSpeedyDiskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 			children = (
 				910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */,
 				910E11D72849AEBF00035B59 /* AcitivityIndicator.swift */,
+				91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				910E11E12849B0CB00035B59 /* SpeedyDiskReducer.swift in Sources */,
 				910E11E52849B28000035B59 /* SpeedyDiskVolume.swift in Sources */,
 				910E11E72849B2C000035B59 /* Constants.swift in Sources */,
+				91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */,
 				910E11DB2849AF9A00035B59 /* Notification+Extension.swift in Sources */,
 				910E11F12849B97B00035B59 /* View+Extension.swift in Sources */,
 				910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */,

@@ -7,37 +7,40 @@
 
 import Foundation
 import AppKit
+import IdentifiedCollections
 
 class SpeedyDiskManager {
     
     static let shared: SpeedyDiskManager = SpeedyDiskManager()
-    var volumes: Set<SpeedyDiskVolume> = []
+    var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     
     private init() {
-        // Check for existing tmpdisks
+        // Check for existing SpeedyDisks
         if let vols = try? FileManager.default.contentsOfDirectory(atPath: "/Volumes") {
             for vol in vols {
                 let speedydiskFilePath = "/Volumes/\(vol)/\(diskInfoFile)"
                 if FileManager.default.fileExists(atPath: speedydiskFilePath) {
                     if let jsonData = FileManager.default.contents(atPath: speedydiskFilePath) {
                         if let volume = try? JSONDecoder().decode(SpeedyDiskVolume.self, from: jsonData) {
-                            self.volumes.insert(volume)
+                            self.volumes.append(volume)
                         }
                     }
                 }
             }
         }
         
-        // AutoCreate any saved TmpDisks
+        // AutoCreate any saved SpeedyDisks
         for volume in self.getAutoCreateVolumes() {
             self.createSpeedyDisk(volume: volume) { _ in }
         }
+        
+        volumes.sort(by: \.name)
     }
     
     // MARK: - SpeedyDiskManager API
     
-    func getAutoCreateVolumes() -> Set<SpeedyDiskVolume> {
-        var autoCreateVolumes: Set<SpeedyDiskVolume> = []
+    func getAutoCreateVolumes() -> [SpeedyDiskVolume] {
+        var autoCreateVolumes: [SpeedyDiskVolume] = []
         if let autoCreate = UserDefaults.standard.object(forKey: "autoCreate") as? [Dictionary<String, Any>] {
             for vol in autoCreate {
                 if let name = vol["name"] as? String, let size = vol["size"] as? UInt, let spotLight = vol["spotLight"] as? Bool {
@@ -50,20 +53,21 @@ class SpeedyDiskManager {
                                                spotLight: spotLight,
                                                warnOnEject: warnOnEject,
                                                folders: folders)
-                    autoCreateVolumes.insert(volume)
+                    autoCreateVolumes.append(volume)
                 }
             }
         }
+        
         return autoCreateVolumes
     }
     
     func addAutoCreateVolume(volume: SpeedyDiskVolume) {
         var autoCreateVolumes = self.getAutoCreateVolumes()
-        autoCreateVolumes.insert(volume)
+        autoCreateVolumes.append(volume)
         self.saveAutoCreateVolumes(volumes: autoCreateVolumes)
     }
     
-    func saveAutoCreateVolumes(volumes: Set<SpeedyDiskVolume>) {
+    func saveAutoCreateVolumes(volumes: [SpeedyDiskVolume]) {
         let value = volumes.map { $0.dictionary() }
         UserDefaults.standard.set(value, forKey: "autoCreate")
     }
@@ -108,7 +112,8 @@ class SpeedyDiskManager {
                 self.addAutoCreateVolume(volume: volume)
             }
             
-            self.volumes.insert(volume)
+            self.volumes.append(volume)
+            self.volumes.sort(by: \.name)
             NotificationCenter.default.post(name: .speedyDiskMounted, object: nil)
             onCreate(nil)
         }
@@ -120,7 +125,7 @@ class SpeedyDiskManager {
     }
     
     func ejectAllSpeedyDisks(recreate: Bool) {
-        let names = self.volumes.map { $0.name }
+        let names = self.volumes.map( \.name )
         self.ejectSpeedyDisksWithName(names: names, recreate: recreate)
     }
     
@@ -153,7 +158,7 @@ class SpeedyDiskManager {
     }
     
     /*
-     diskEjected takes a path and checks to see if it's a TmpDisk
+     diskEjected takes a path and checks to see if it's a SpeedyDisk
      If it is, remove it from the volumes and return true so we can refresh the menubar
      */
     func diskEjected(path: String) -> Bool {
@@ -204,5 +209,19 @@ class SpeedyDiskManager {
     
     func exists(volume: SpeedyDiskVolume) -> Bool {
         FileManager.default.fileExists(atPath: volume.path())
+    }
+}
+
+extension Sequence {
+    func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
+        return map { $0[keyPath: keyPath] }
+    }
+}
+
+extension IdentifiedArray {
+    mutating func sort<T: Comparable>(by keyPath: KeyPath<Element, T>) {
+        return sort { a, b in
+            return a[keyPath: keyPath] < b[keyPath: keyPath]
+        }
     }
 }

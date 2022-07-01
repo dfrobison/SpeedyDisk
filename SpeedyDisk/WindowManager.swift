@@ -68,10 +68,14 @@ class WindowManager: NSObject, NSWindowDelegate {
         NSApplication.shared.activate(ignoringOtherApps: true)
         
         if autoCreateManagerWindow == nil {
-            autoCreateManagerWindow = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "AutoCreateManagerWindow") as? NSWindowController
+            let contentView = AutoCreateSpeedyDiskView(store: store)
+            let hostingCtrl = NSHostingController(rootView: contentView.frame(width: 400, height: 215))
+            let window = NSWindow(contentViewController: hostingCtrl)
+            window.title = "AutoCreate Speedy Disks"
+            autoCreateManagerWindow = NSWindowController(window: window)
             autoCreateManagerWindow?.window?.delegate = self
         }
-        
+
         autoCreateManagerWindow?.showWindow(nil)
         autoCreateManagerWindow?.window?.makeKey()
     }

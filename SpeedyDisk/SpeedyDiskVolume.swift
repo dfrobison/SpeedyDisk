@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct SpeedyDiskVolume: Hashable, Codable {
+struct SpeedyDiskVolume: Codable, Identifiable {
+    var id = UUID()
     var name: String = ""
     var size: UInt = 64
     var autoCreate: Bool = false

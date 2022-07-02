@@ -4,7 +4,6 @@
 //
 //  Created by Doug on 6/2/22.
 //
-
 import AppKit
 import ComposableArchitecture
 import Combine
@@ -55,7 +54,7 @@ class WindowManager: NSObject, NSWindowDelegate {
             let contentView = CreateSpeedyDiskView(store: store)
             let hostingCtrl = NSHostingController(rootView: contentView.frame(width: 400, height: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
-            window.title = "Create Speedy Disk"
+            window.title = Constants.createSpeedyDisk
             newSpeedyDiskWindow = NSWindowController(window: window)
             newSpeedyDiskWindow?.window?.delegate = self
         }
@@ -71,12 +70,19 @@ class WindowManager: NSObject, NSWindowDelegate {
             let contentView = AutoCreateSpeedyDiskView(store: store)
             let hostingCtrl = NSHostingController(rootView: contentView.frame(width: 800, height: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
-            window.title = "AutoCreate Speedy Disks"
+            window.title = Constants.autoCreateSpeedyDisks
             autoCreateManagerWindow = NSWindowController(window: window)
             autoCreateManagerWindow?.window?.delegate = self
         }
 
         autoCreateManagerWindow?.showWindow(nil)
         autoCreateManagerWindow?.window?.makeKey()
+    }
+}
+
+extension WindowManager {
+    struct Constants {
+        static let autoCreateSpeedyDisks = "AutoCreate Speedy Disks"
+        static let createSpeedyDisk = "Create Speedy Disk"
     }
 }

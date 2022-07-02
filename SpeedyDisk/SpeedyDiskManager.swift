@@ -10,15 +10,14 @@ import AppKit
 import IdentifiedCollections
 
 class SpeedyDiskManager {
-    
     static let shared: SpeedyDiskManager = SpeedyDiskManager()
     var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     
     private init() {
         // Check for existing SpeedyDisks
-        if let vols = try? FileManager.default.contentsOfDirectory(atPath: "/Volumes") {
+        if let vols = try? FileManager.default.contentsOfDirectory(atPath: AppConstants.drivePathVolumes) {
             for vol in vols {
-                let speedydiskFilePath = "/Volumes/\(vol)/\(diskInfoFile)"
+                let speedydiskFilePath = "\(AppConstants.drivePathVolumes)/\(vol)/\(AppConstants.diskInfoFile)"
                 if FileManager.default.fileExists(atPath: speedydiskFilePath) {
                     if let jsonData = FileManager.default.contents(atPath: speedydiskFilePath) {
                         if let volume = try? JSONDecoder().decode(SpeedyDiskVolume.self, from: jsonData) {
@@ -40,22 +39,19 @@ class SpeedyDiskManager {
     }
     
     // MARK: - SpeedyDiskManager API
-    
     func getAutoCreateVolumes() -> [SpeedyDiskVolume] {
         var autoCreateVolumes: [SpeedyDiskVolume] = []
         if let autoCreate = UserDefaults.standard.object(forKey: "autoCreate") as? [Dictionary<String, Any>] {
             for vol in autoCreate {
                 if let name = vol["name"] as? String, let size = vol["size"] as? UInt, let spotLight = vol["spotLight"] as? Bool {
-                    
                     let warnOnEject = vol["warnOnEject"] as? Bool ?? false
                     let folders = vol["folders"] as? [String] ?? []
-                    
                     let volume = SpeedyDiskVolume(name: name,
                                                   size: size,
                                                   autoCreate: true,
-                                               spotLight: spotLight,
-                                               warnOnEject: warnOnEject,
-                                               folders: folders)
+                                                  spotLight: spotLight,
+                                                  warnOnEject: warnOnEject,
+                                                  folders: folders)
                     autoCreateVolumes.append(volume)
                 }
             }
@@ -122,7 +118,7 @@ class SpeedyDiskManager {
             
             if let jsonData = try? JSONEncoder().encode(volume) {
                 let jsonString = String(data: jsonData, encoding: .utf8)!
-                try? jsonString.write(toFile: "\(volume.path())/\(diskInfoFile)", atomically: true, encoding: .utf8)
+                try? jsonString.write(toFile: "\(volume.path())/\(AppConstants.diskInfoFile)", atomically: true, encoding: .utf8)
             }
             
             if volume.spotLight {
@@ -148,8 +144,8 @@ class SpeedyDiskManager {
     }
     
     func ejectAllSpeedyDisks(recreate: Bool) {
-        let names = self.volumes.map( \.name )
-        self.ejectSpeedyDisksWithName(names: names, recreate: recreate)
+        self.ejectSpeedyDisksWithName(names: self.volumes.map( \.name ),
+                                      recreate: recreate)
     }
     
     func ejectSpeedyDisksWithName(names: [String], recreate: Bool) {
@@ -185,12 +181,13 @@ class SpeedyDiskManager {
      If it is, remove it from the volumes and return true so we can refresh the menubar
      */
     func diskEjected(path: String) -> SpeedyDiskVolume? {
-
+        
         for volume in self.volumes {
             if volume.path() == path {
                 return volume
             }
         }
+        
         return nil
     }
     
@@ -247,10 +244,7 @@ extension IdentifiedArray {
         if self.count < 2 {
             return
         }
-
+        
         sort { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
-//        sort { a, b in
-//            return a[keyPath: keyPath] < b[keyPath: keyPath]
-//        }
     }
 }

@@ -9,9 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct RAMdiskApp: App {
-    
-    // swiftlint:disable:next weak_delegate
+struct SpeedyDiskApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
@@ -39,11 +37,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didUnmountNotification, object: nil, queue: .main) { [weak self] notification in
-           self?.viewStore.send(.diskEjected(path: notification.userInfo?["NSDevicePath"] as? String))
+            self?.viewStore.send(.diskEjected(path: notification.userInfo?[AppConstants.devicePath] as? String))
         }
         
         // Kill the launcher app if it's around
-        let launcherAppId = "com.RobisonSoftwareDevelopment.SpeedyDiskLauncher"
+        let launcherAppId = AppConstants.launcherAppId
         let runningApps = NSWorkspace.shared.runningApplications
         let isRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
         if isRunning {

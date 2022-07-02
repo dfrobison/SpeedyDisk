@@ -18,7 +18,7 @@ class SpeedyDiskController {
     private var statusItem = NSStatusBar.system.statusItem(withLength: 28.0)
     private var statusMenu = NSMenu()
     private var currentSpeedyDiskMenu: NSMenu = NSMenu()
-    private let launcherAppId = "com.imothee.TmpDiskLauncher"
+    private let launcherAppId = AppConstants.launcherAppId
     private let windowManager: WindowManager
     private let currentSpeedyDisksItem = NSMenuItem(title: NSLocalizedString("Current Speedy Disks", comment: ""), action: nil, keyEquivalent: "")
     private let autoCreateManagerItem = NSMenuItem(title: NSLocalizedString("AutoCreate Manager", comment: ""), action: #selector(autoCreateManager(sender:)), keyEquivalent: "")
@@ -82,8 +82,7 @@ class SpeedyDiskController {
         statusItem.menu = statusMenu
         
         // Rebuild
-        rebuildSpeedyDiskMenu()
-        rebuildAutoCreateMenuItem()
+        rebuild()
         
         cancellable = viewStore.publisher.rebuildMenu
             .sink(receiveValue: { rebuildDiskMenu in
@@ -93,13 +92,8 @@ class SpeedyDiskController {
             })
     }
     
-    func windowWillClose(window: NSWindowController) {
-        
-    }
-    
     // MARK: - Internal
-    
-    func confirmEject(volume: SpeedyDiskVolume) -> Bool {
+    private func confirmEject(volume: SpeedyDiskVolume) -> Bool {
         if (volume.showWarning()) {
             let alert = NSAlert()
             alert.messageText = NSLocalizedString("Volume contains files, are you sure you want to eject?", comment: "")
@@ -111,7 +105,7 @@ class SpeedyDiskController {
         return true
     }
     
-    func confirmDelete(volume: SpeedyDiskVolume) -> Bool {
+    private func confirmDelete(volume: SpeedyDiskVolume) -> Bool {
         if (volume.showWarning()) {
             let alert = NSAlert()
             alert.messageText = NSLocalizedString("Are you sure you want to delete? Volume contains files.", comment: "")
@@ -169,7 +163,6 @@ class SpeedyDiskController {
     }
     
     // MARK: - Actions
-    
     @objc func newRAMDisk(sender: AnyObject) {
         windowManager.showNewSpeedyDiskWindow()
     }

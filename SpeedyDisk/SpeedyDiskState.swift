@@ -33,7 +33,6 @@ struct SpeedyDiskState: Equatable {
     var autoCreateVolumes: IdentifiedArrayOf<SpeedyDiskVolume> {
         return SpeedyDiskManager.shared.volumes.filter { $0.autoCreate }
     }
-
     
     mutating func reset() {
         diskName = ""

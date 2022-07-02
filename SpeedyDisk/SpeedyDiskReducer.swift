@@ -109,6 +109,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
         case .toggleAutoCreate(let volume):
             SpeedyDiskManager.shared.toggleAutoCreate(volume: volume)
+            state.rebuildMenu = true
             return .none
             
         case .toggleWarnOnEject(let volume):

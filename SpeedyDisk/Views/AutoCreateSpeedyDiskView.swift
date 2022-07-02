@@ -15,11 +15,17 @@ struct AutoCreateSpeedyDiskHeaderRowView: View {
         LazyVGrid(columns: columns) {
             Group {
                 Text("Name")
+                    .underline()
                 Text("Size")
+                    .underline()
                 Text("Folders")
+                    .underline()
                 Text("AutoCreate")
+                    .underline()
                 Text("WarnOnEject")
+                    .underline()
                 Text("Spotlight")
+                    .underline()
             }
             .font(.headline)
         }

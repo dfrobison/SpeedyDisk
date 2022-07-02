@@ -67,8 +67,7 @@ class SpeedyDiskMenuItem: NSMenuItem {
             let button = NSButton(frame: NSRect(x: 150, y: 5, width: 15, height: 15))
             button.action = #selector(onDelete(sender:))
             button.target = self
-            button.image = NSImage(systemSymbolName: "x.circle", accessibilityDescription: nil)
-            button.wantsLayer = true
+            button.image = NSImage(systemSymbolName: "trash.fill", accessibilityDescription: nil)
             button.isBordered = false
             return button
         }()

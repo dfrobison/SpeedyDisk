@@ -13,6 +13,12 @@ class SpeedyDiskManager {
     static let shared: SpeedyDiskManager = SpeedyDiskManager()
     var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     
+    var autoCreateVolumes: [SpeedyDiskVolume] {
+        self.volumes.filter { volume in
+            volume.autoCreate
+        }
+    }
+    
     private init() {
         // Check for existing SpeedyDisks
         if let vols = try? FileManager.default.contentsOfDirectory(atPath: AppConstants.drivePathVolumes) {
@@ -33,31 +39,28 @@ class SpeedyDiskManager {
         }
         
         // AutoCreate any saved SpeedyDisks
-        for volume in self.getAutoCreateVolumes() {
-            self.createSpeedyDisk(volume: volume) { _ in }
-        }
+        restoreAutoCreateVolumes()
     }
     
     // MARK: - SpeedyDiskManager API
-    func getAutoCreateVolumes() -> [SpeedyDiskVolume] {
-        var autoCreateVolumes: [SpeedyDiskVolume] = []
+    func restoreAutoCreateVolumes() {
         if let autoCreate = UserDefaults.standard.object(forKey: "autoCreate") as? [Dictionary<String, Any>] {
             for vol in autoCreate {
                 if let name = vol["name"] as? String, let size = vol["size"] as? UInt, let spotLight = vol["spotLight"] as? Bool {
-                    let warnOnEject = vol["warnOnEject"] as? Bool ?? false
-                    let folders = vol["folders"] as? [String] ?? []
-                    let volume = SpeedyDiskVolume(name: name,
-                                                  size: size,
-                                                  autoCreate: true,
-                                                  spotLight: spotLight,
-                                                  warnOnEject: warnOnEject,
-                                                  folders: folders)
-                    autoCreateVolumes.append(volume)
+                    if !self.volumes.contains(where: {$0.name == name}) {
+                        let warnOnEject = vol["warnOnEject"] as? Bool ?? false
+                        let folders = vol["folders"] as? [String] ?? []
+                        let volume = SpeedyDiskVolume(name: name,
+                                                      size: size,
+                                                      autoCreate: true,
+                                                      spotLight: spotLight,
+                                                      warnOnEject: warnOnEject,
+                                                      folders: folders)
+                        self.createSpeedyDisk(volume: volume) { _ in }
+                    }
                 }
             }
         }
-        
-        return autoCreateVolumes
     }
     
     func toggleWarnOnEject(volume: SpeedyDiskVolume) {
@@ -69,26 +72,18 @@ class SpeedyDiskManager {
     }
     
     func toggleAutoCreate(volume: SpeedyDiskVolume) {
-        if self.volumes.contains(volume) {
-            self.volumes[id: volume.id]?.autoCreate.toggle()
-            self.saveAutoCreateVolumes(volumes: self.volumes.filter {$0.autoCreate})
-        }
+        self.volumes[id: volume.id]?.autoCreate.toggle()
+        self.saveAutoCreateVolumes()
     }
     
     func deleteVolume(volume: SpeedyDiskVolume) {
         self.volumes.remove(volume)
-        self.saveAutoCreateVolumes(volumes: self.volumes.filter {$0.autoCreate})
+        self.saveAutoCreateVolumes()
     }
     
-    func addAutoCreateVolume(volume: SpeedyDiskVolume) {
-        var autoCreateVolumes = self.getAutoCreateVolumes()
-        autoCreateVolumes.append(volume)
-        self.saveAutoCreateVolumes(volumes: autoCreateVolumes)
-    }
-    
-    func saveAutoCreateVolumes(volumes: [SpeedyDiskVolume]) {
-        let value = volumes.map { $0.dictionary() }
-        UserDefaults.standard.set(value, forKey: "autoCreate")
+    func saveAutoCreateVolumes() {
+        UserDefaults.standard.set(autoCreateVolumes.map { $0.dictionary() },
+                                  forKey: "autoCreate")
     }
     
     func createSpeedyDisk(volume: SpeedyDiskVolume, onCreate: @escaping (SpeedyDiskError?) -> Void) {
@@ -116,6 +111,9 @@ class SpeedyDiskManager {
                 return onCreate(.failed)
             }
             
+            self.volumes.append(volume)
+            self.volumes.sort(by: \.name)
+            
             if let jsonData = try? JSONEncoder().encode(volume) {
                 let jsonString = String(data: jsonData, encoding: .utf8)!
                 try? jsonString.write(toFile: "\(volume.path())/\(AppConstants.diskInfoFile)", atomically: true, encoding: .utf8)
@@ -125,14 +123,10 @@ class SpeedyDiskManager {
                 self.indexVolume(volume: volume)
             }
             
-            self.createFolders(volume: volume)
-            
             if volume.autoCreate {
-                self.addAutoCreateVolume(volume: volume)
+                self.saveAutoCreateVolumes()
             }
             
-            self.volumes.append(volume)
-            self.volumes.sort(by: \.name)
             NotificationCenter.default.post(name: .speedyDiskMounted, object: nil)
             onCreate(nil)
         }

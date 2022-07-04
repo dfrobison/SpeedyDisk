@@ -5,6 +5,7 @@
 //  Created by Doug on 7/1/22.
 //
 import Cocoa
+import OSLog
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -17,7 +18,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let mainAppIdentifier = "com.RobisonSoftwareDevelopment.SpeedyDisk"
         let runningApps = NSWorkspace.shared.runningApplications
         let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
+        let logger = Logger(subsystem: "com.RobisonSoftwareDevelopment.SpeedyDiskLauncher", category: "launcher")
 
+        logger.debug("Entered - applicationDidFinishLaunching - isAppRunning = \(isRunning)")
+        
         if !isRunning {
             DistributedNotificationCenter.default().addObserver(self, selector: #selector(self.terminate), name: .killLauncher, object: mainAppIdentifier)
 
@@ -31,9 +35,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             let newPath = NSString.path(withComponents: components)
 
-            NSWorkspace.shared.launchApplication(newPath)
+            let result = NSWorkspace.shared.launchApplication(newPath)
+            
+            logger.debug("Launched - (\(result) at location - \(newPath)")
+
         }
         else {
+            logger.debug("Terminated - \(mainAppIdentifier)")
             self.terminate()
         }
     }

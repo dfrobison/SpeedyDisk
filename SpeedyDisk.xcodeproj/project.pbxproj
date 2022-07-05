@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		91004A902873916200AE7EB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91004A8F2873916200AE7EB7 /* AppDelegate.swift */; };
+		91004A942873916300AE7EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91004A932873916300AE7EB7 /* Assets.xcassets */; };
+		91004A972873916300AE7EB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91004A952873916300AE7EB7 /* Main.storyboard */; };
 		910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */; };
 		910E11C72849AD5700035B59 /* CreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */; };
 		910E11C92849AD5900035B59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910E11C82849AD5900035B59 /* Assets.xcassets */; };
@@ -25,13 +28,28 @@
 		910E11ED2849B59700035B59 /* SpeedyDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EC2849B59700035B59 /* SpeedyDiskController.swift */; };
 		910E11EF2849B67800035B59 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11EE2849B67800035B59 /* WindowManager.swift */; };
 		910E11F12849B97B00035B59 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11F02849B97B00035B59 /* View+Extension.swift */; };
-		91D7A2D5286FE99300AFE9B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D7A2D4286FE99300AFE9B0 /* Assets.xcassets */; };
-		91D7A2D8286FE99300AFE9B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D7A2D7286FE99300AFE9B0 /* Preview Assets.xcassets */; };
-		91D7A2DF286FEBA500AFE9B0 /* SpeedyDiskLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91D7A2CE286FE99100AFE9B0 /* SpeedyDiskLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		915DD69B287394150065B6A9 /* SpeedDiskLauncher.app in Resources */ = {isa = PBXBuildFile; fileRef = 91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */; };
+		915DD6A0287394950065B6A9 /* SpeedDiskLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		91D7A2E2286FEBEF00AFE9B0 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */; };
-		91D7A2E4286FED2200AFE9B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D7A2E3286FED2200AFE9B0 /* AppDelegate.swift */; };
 		91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		915DD69C287394150065B6A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 910E11B92849AD5700035B59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91004A8C2873916200AE7EB7;
+			remoteInfo = SpeedDiskLauncher;
+		};
+		915DD69E2873942F0065B6A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 910E11B92849AD5700035B59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91004A8C2873916200AE7EB7;
+			remoteInfo = SpeedDiskLauncher;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		91D7A2DE286FEB6200AFE9B0 /* CopyFiles */ = {
@@ -40,13 +58,19 @@
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
-				91D7A2DF286FEBA500AFE9B0 /* SpeedyDiskLauncher.app in CopyFiles */,
+				915DD6A0287394950065B6A9 /* SpeedDiskLauncher.app in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedDiskLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91004A8F2873916200AE7EB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		91004A932873916300AE7EB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		91004A962873916300AE7EB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		91004A982873916300AE7EB7 /* SpeedDiskLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpeedDiskLauncher.entitlements; sourceTree = "<group>"; };
+		91004A9C2873927C00AE7EB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		910E11C12849AD5700035B59 /* SpeedyDisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedyDisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskApp.swift; sourceTree = "<group>"; };
 		910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSpeedyDiskView.swift; sourceTree = "<group>"; };
@@ -67,17 +91,18 @@
 		910E11EE2849B67800035B59 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		910E11F02849B97B00035B59 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		91305EEB287285E600ADF6FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		91D7A2CE286FE99100AFE9B0 /* SpeedyDiskLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedyDiskLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		91D7A2D4286FE99300AFE9B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		91D7A2D7286FE99300AFE9B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		91D7A2D9286FE99300AFE9B0 /* SpeedyDiskLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpeedyDiskLauncher.entitlements; sourceTree = "<group>"; };
-		91D7A2DD286FEB2300AFE9B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
-		91D7A2E3286FED2200AFE9B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCreateSpeedyDiskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		91004A8A2873916200AE7EB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		910E11BE2849AD5700035B59 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -87,21 +112,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		91D7A2CB286FE99100AFE9B0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		91004A8E2873916200AE7EB7 /* SpeedDiskLauncher */ = {
+			isa = PBXGroup;
+			children = (
+				91004A9C2873927C00AE7EB7 /* Info.plist */,
+				91004A8F2873916200AE7EB7 /* AppDelegate.swift */,
+				91004A932873916300AE7EB7 /* Assets.xcassets */,
+				91004A952873916300AE7EB7 /* Main.storyboard */,
+				91004A982873916300AE7EB7 /* SpeedDiskLauncher.entitlements */,
+			);
+			path = SpeedDiskLauncher;
+			sourceTree = "<group>";
+		};
 		910E11B82849AD5700035B59 = {
 			isa = PBXGroup;
 			children = (
 				910E11C32849AD5700035B59 /* SpeedyDisk */,
-				91D7A2CF286FE99100AFE9B0 /* SpeedyDiskLauncher */,
+				91004A8E2873916200AE7EB7 /* SpeedDiskLauncher */,
 				910E11C22849AD5700035B59 /* Products */,
 				91D7A2E0286FEBEF00AFE9B0 /* Frameworks */,
 			);
@@ -111,7 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				910E11C12849AD5700035B59 /* SpeedyDisk.app */,
-				91D7A2CE286FE99100AFE9B0 /* SpeedyDiskLauncher.app */,
+				91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,26 +197,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		91D7A2CF286FE99100AFE9B0 /* SpeedyDiskLauncher */ = {
-			isa = PBXGroup;
-			children = (
-				91D7A2DD286FEB2300AFE9B0 /* Info.plist */,
-				91D7A2D4286FE99300AFE9B0 /* Assets.xcassets */,
-				91D7A2D9286FE99300AFE9B0 /* SpeedyDiskLauncher.entitlements */,
-				91D7A2D6286FE99300AFE9B0 /* Preview Content */,
-				91D7A2E3286FED2200AFE9B0 /* AppDelegate.swift */,
-			);
-			path = SpeedyDiskLauncher;
-			sourceTree = "<group>";
-		};
-		91D7A2D6286FE99300AFE9B0 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				91D7A2D7286FE99300AFE9B0 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		91D7A2E0286FEBEF00AFE9B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +208,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		91004A8C2873916200AE7EB7 /* SpeedDiskLauncher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91004A992873916300AE7EB7 /* Build configuration list for PBXNativeTarget "SpeedDiskLauncher" */;
+			buildPhases = (
+				91004A892873916200AE7EB7 /* Sources */,
+				91004A8A2873916200AE7EB7 /* Frameworks */,
+				91004A8B2873916200AE7EB7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpeedDiskLauncher;
+			productName = SpeedDiskLauncher;
+			productReference = 91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */;
+			productType = "com.apple.product-type.application";
+		};
 		910E11C02849AD5700035B59 /* SpeedyDisk */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 910E11D02849AD5900035B59 /* Build configuration list for PBXNativeTarget "SpeedyDisk" */;
@@ -210,6 +237,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				915DD69D287394150065B6A9 /* PBXTargetDependency */,
+				915DD69F2873942F0065B6A9 /* PBXTargetDependency */,
 			);
 			name = SpeedyDisk;
 			packageProductDependencies = (
@@ -217,23 +246,6 @@
 			);
 			productName = SpeedyDisk;
 			productReference = 910E11C12849AD5700035B59 /* SpeedyDisk.app */;
-			productType = "com.apple.product-type.application";
-		};
-		91D7A2CD286FE99100AFE9B0 /* SpeedyDiskLauncher */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 91D7A2DC286FE99300AFE9B0 /* Build configuration list for PBXNativeTarget "SpeedyDiskLauncher" */;
-			buildPhases = (
-				91D7A2CA286FE99100AFE9B0 /* Sources */,
-				91D7A2CB286FE99100AFE9B0 /* Frameworks */,
-				91D7A2CC286FE99100AFE9B0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SpeedyDiskLauncher;
-			productName = SpeedyDiskLauncher;
-			productReference = 91D7A2CE286FE99100AFE9B0 /* SpeedyDiskLauncher.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -246,12 +258,11 @@
 				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					91004A8C2873916200AE7EB7 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
 					910E11C02849AD5700035B59 = {
 						CreatedOnToolsVersion = 13.4;
-					};
-					91D7A2CD286FE99100AFE9B0 = {
-						CreatedOnToolsVersion = 13.4.1;
-						LastSwiftMigration = 1340;
 					};
 				};
 			};
@@ -272,33 +283,42 @@
 			projectRoot = "";
 			targets = (
 				910E11C02849AD5700035B59 /* SpeedyDisk */,
-				91D7A2CD286FE99100AFE9B0 /* SpeedyDiskLauncher */,
+				91004A8C2873916200AE7EB7 /* SpeedDiskLauncher */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		91004A8B2873916200AE7EB7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91004A942873916300AE7EB7 /* Assets.xcassets in Resources */,
+				91004A972873916300AE7EB7 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		910E11BF2849AD5700035B59 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				910E11CC2849AD5900035B59 /* Preview Assets.xcassets in Resources */,
 				910E11C92849AD5900035B59 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		91D7A2CC286FE99100AFE9B0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				91D7A2D8286FE99300AFE9B0 /* Preview Assets.xcassets in Resources */,
-				91D7A2D5286FE99300AFE9B0 /* Assets.xcassets in Resources */,
+				915DD69B287394150065B6A9 /* SpeedDiskLauncher.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		91004A892873916200AE7EB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91004A902873916200AE7EB7 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		910E11BD2849AD5700035B59 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -322,17 +342,93 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		91D7A2CA286FE99100AFE9B0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				91D7A2E4286FED2200AFE9B0 /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		915DD69D287394150065B6A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91004A8C2873916200AE7EB7 /* SpeedDiskLauncher */;
+			targetProxy = 915DD69C287394150065B6A9 /* PBXContainerItemProxy */;
+		};
+		915DD69F2873942F0065B6A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91004A8C2873916200AE7EB7 /* SpeedDiskLauncher */;
+			targetProxy = 915DD69E2873942F0065B6A9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		91004A952873916300AE7EB7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91004A962873916300AE7EB7 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		91004A9A2873916300AE7EB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpeedDiskLauncher/SpeedDiskLauncher.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 16;
+				DEVELOPMENT_TEAM = 9527LC56YN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpeedDiskLauncher/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RobisonSoftwareDevelopment.SpeedyDiskLauncher;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		91004A9B2873916300AE7EB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpeedDiskLauncher/SpeedDiskLauncher.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 16;
+				DEVELOPMENT_TEAM = 9527LC56YN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpeedDiskLauncher/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RobisonSoftwareDevelopment.SpeedyDiskLauncher;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		910E11CE2849AD5900035B59 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -456,7 +552,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDisk/Preview Content\"";
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -487,7 +583,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDisk/Preview Content\"";
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -508,72 +604,18 @@
 			};
 			name = Release;
 		};
-		91D7A2DA286FE99300AFE9B0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SpeedyDiskLauncher/SpeedyDiskLauncher.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
-				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDiskLauncher/Preview Content\"";
-				DEVELOPMENT_TEAM = 9527LC56YN;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SpeedyDiskLauncher/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.RobisonSoftwareDevelopment.SpeedyDiskLauncher;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		91D7A2DB286FE99300AFE9B0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SpeedyDiskLauncher/SpeedyDiskLauncher.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
-				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDiskLauncher/Preview Content\"";
-				DEVELOPMENT_TEAM = 9527LC56YN;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SpeedyDiskLauncher/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.RobisonSoftwareDevelopment.SpeedyDiskLauncher;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		91004A992873916300AE7EB7 /* Build configuration list for PBXNativeTarget "SpeedDiskLauncher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91004A9A2873916300AE7EB7 /* Debug */,
+				91004A9B2873916300AE7EB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		910E11BC2849AD5700035B59 /* Build configuration list for PBXProject "SpeedyDisk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -588,15 +630,6 @@
 			buildConfigurations = (
 				910E11D12849AD5900035B59 /* Debug */,
 				910E11D22849AD5900035B59 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		91D7A2DC286FE99300AFE9B0 /* Build configuration list for PBXNativeTarget "SpeedyDiskLauncher" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				91D7A2DA286FE99300AFE9B0 /* Debug */,
-				91D7A2DB286FE99300AFE9B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

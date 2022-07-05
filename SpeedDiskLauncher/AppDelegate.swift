@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             components.removeLast()
             components.removeLast()
             components.append("MacOS")
-            components.append("SpeeyDisk")
+            components.append("SpeedyDisk")
 
             let newPath = NSString.path(withComponents: components)
 
@@ -58,4 +58,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.terminate(nil)
     }
 }
-

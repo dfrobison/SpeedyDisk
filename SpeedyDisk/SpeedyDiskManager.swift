@@ -113,7 +113,8 @@ class SpeedyDiskManager {
             
             self.volumes.append(volume)
             self.volumes.sort(by: \.name)
-            
+            self.createFolders(volume: volume)
+
             if let jsonData = try? JSONEncoder().encode(volume) {
                 let jsonString = String(data: jsonData, encoding: .utf8)!
                 try? jsonString.write(toFile: "\(volume.path())/\(AppConstants.diskInfoFile)", atomically: true, encoding: .utf8)

@@ -181,7 +181,9 @@ class SpeedyDiskController {
                 SMLoginItemSetEnabled(self.launcherAppId as CFString, false)
                 menuItem.state = .off
             } else {
-                SMLoginItemSetEnabled(self.launcherAppId as CFString, true)
+                if SMLoginItemSetEnabled(self.launcherAppId as CFString, true) == false {
+                    fatalError("Speedy - Can't find application launcher")
+                }
                 menuItem.state = .on
             }
         }

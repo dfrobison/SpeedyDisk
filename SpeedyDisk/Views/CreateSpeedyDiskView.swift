@@ -29,8 +29,19 @@ struct CreateSpeedyDiskView: View {
                         onIncrement: {viewStore.send(.incrementSpeedyDiskSize)},
                         onDecrement: {viewStore.send(.decrementSpeedyDiskSize)}) {}
                     
-                    Text("\(viewStore.diskSize) MB")
-                        .frame(alignment: .leading)
+                    TextField(
+                      "",
+                      text: viewStore.binding(
+                        get: {$0.diskSize},
+                        send: SpeedyDiskAction.diskSizeChanged
+                      )
+                    )
+                    .frame(width: 50, alignment: .trailing)
+                    .multilineTextAlignment(.trailing)
+                    
+                    Text( "MB")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
                 }
                 
                 Text("Folders:")
@@ -58,7 +69,7 @@ struct CreateSpeedyDiskView: View {
             .disabled(viewStore.showActivityIndicator)
             
             Button("Create Speedy Disk") {viewStore.send(.createSpeedyDisk)}
-            .disabled(!viewStore.isDiskNameValid)
+            .disabled(!viewStore.canCreate)
             .alert(
                 self.store.scope(state: \.alert),
                 dismiss: .alertDismissedTapped

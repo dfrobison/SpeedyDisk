@@ -11,15 +11,23 @@ struct SpeedyDiskState: Equatable {
     var closeCreateSpeedyDiskWindow = false
     var alert: AlertState<SpeedyDiskAction>?
     var showActivityIndicator = false
+    var selectedVolumeId: UUID?
     @BindableState var diskName = ""
     @BindableState var folders = ""
-    var diskSize:UInt = 64
+    var diskSize = "64"
     @BindableState var autoCreate = false
     @BindableState var warnOnEject = false
     @BindableState var spotLight = false
     
-    var isDiskNameValid: Bool {
-        !diskName.trimmingCharacters(in: .whitespaces).isEmpty
+    var getDiskSize: UInt {
+        if let diskSize = UInt(self.diskSize) {
+            return diskSize
+        }
+        return 0
+    }
+    
+    var canCreate: Bool {
+        !diskName.trimmingCharacters(in: .whitespaces).isEmpty && getDiskSize > 0
     }
     
     var count: Int {
@@ -37,7 +45,7 @@ struct SpeedyDiskState: Equatable {
     mutating func reset() {
         diskName = ""
         folders = ""
-        diskSize = 64
+        diskSize = "64"
         autoCreate = false
         warnOnEject = false
         spotLight = false

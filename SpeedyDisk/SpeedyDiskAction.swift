@@ -22,4 +22,7 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case toggleAutoCreate(volume: SpeedyDiskVolume)
     case toggleWarnOnEject(volume: SpeedyDiskVolume)
     case toggleSpotLight(volume: SpeedyDiskVolume)
+    case diskSizeChanged(String)
+    case volumeSelected(UUID)
+    case resizeVolume(UUID)
 }

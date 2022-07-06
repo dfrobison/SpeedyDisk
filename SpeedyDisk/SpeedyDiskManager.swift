@@ -43,8 +43,12 @@ class SpeedyDiskManager {
     }
     
     // MARK: - SpeedyDiskManager API
+    func getVolume(volumeId: UUID) -> SpeedyDiskVolume? {
+        volumes.first(where: {$0.id == volumeId})
+    }
+    
     func restoreAutoCreateVolumes() {
-        if let autoCreate = UserDefaults.standard.object(forKey: "autoCreate") as? [Dictionary<String, Any>] {
+        if let autoCreate = UserDefaults.standard.object(forKey: Constants.autoCreate) as? [Dictionary<String, Any>] {
             for vol in autoCreate {
                 if let name = vol["name"] as? String, let size = vol["size"] as? UInt, let spotLight = vol["spotLight"] as? Bool {
                     if !self.volumes.contains(where: {$0.name == name}) {
@@ -62,6 +66,11 @@ class SpeedyDiskManager {
             }
         }
     }
+    
+    func setDiskSize(volumeId: UUID, diskSize: UInt) {
+        self.volumes[id: volumeId]?.size = diskSize
+    }
+
     
     func toggleWarnOnEject(volume: SpeedyDiskVolume) {
         self.volumes[id: volume.id]?.warnOnEject.toggle()
@@ -83,7 +92,7 @@ class SpeedyDiskManager {
     
     func saveAutoCreateVolumes() {
         UserDefaults.standard.set(autoCreateVolumes.map { $0.dictionary() },
-                                  forKey: "autoCreate")
+                                  forKey: Constants.autoCreate)
     }
     
     func createSpeedyDisk(volume: SpeedyDiskVolume, onCreate: @escaping (SpeedyDiskError?) -> Void) {
@@ -176,7 +185,6 @@ class SpeedyDiskManager {
      If it is, remove it from the volumes and return true so we can refresh the menubar
      */
     func diskEjected(path: String) -> SpeedyDiskVolume? {
-        
         for volume in self.volumes {
             if volume.path() == path {
                 return volume
@@ -189,18 +197,12 @@ class SpeedyDiskManager {
     // MARK: - Helper functions
     func createSpeedyDisk(volume: SpeedyDiskVolume) -> Process {
         let task = Process()
-        task.launchPath = "/bin/zsh"
-        
-        let dSize = UInt64(volume.size) * 2048
-        
-        let command: String
-        
-        //command = "diskutil eraseVolume HFS+ \"\(volume.name)\" `hdiutil attach -nomount ram://\(dSize)`"
-        command = "diskutil partitionDisk `hdiutil attach -nomount ram://\(dSize)` 1 GPTFormat APFS \"\(volume.name)\" \"100%\""
-        
-        print(command)
+        let diskSize = volume.size * 2048
+        let command = "diskutil partitionDisk `hdiutil attach -nomount ram://\(diskSize)` 1 GPTFormat APFS \"\(volume.name)\" \"100%\""
         
         task.arguments = ["-c", command]
+        task.launchPath = Constants.shell
+
         return task
     }
     
@@ -215,7 +217,7 @@ class SpeedyDiskManager {
     
     func indexVolume(volume: SpeedyDiskVolume) {
         let task = Process()
-        task.launchPath = "/bin/zsh"
+        task.launchPath = Constants.shell
         
         let command = "mdutil -i on \(volume.path())"
         task.arguments = ["-c", command]
@@ -227,19 +229,9 @@ class SpeedyDiskManager {
     }
 }
 
-extension Sequence {
-    func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
-        return map { $0[keyPath: keyPath] }
-    }
-}
-
-extension IdentifiedArray {
-    mutating func sort<T: Comparable>(by keyPath: KeyPath<Element, T>) {
-        
-        if self.count < 2 {
-            return
-        }
-        
-        sort { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
+extension SpeedyDiskManager {
+    struct Constants {
+        static let shell = "/bin/zsh"
+        static let autoCreate = "autoCreate"
     }
 }

@@ -47,12 +47,16 @@ struct AutoCreateSpeedyDiskToggleView: View {
 
 struct AutoCreateSpeedyDiskRowsView: View {
     let store: Store<SpeedyDiskState, SpeedyDiskAction>
+    private enum Field: Int, Hashable {
+        case diskSize
+    }
+    @FocusState private var focusedField: Field?
     
     var body: some View {
         WithViewStore(store) { viewStore in
             ForEach(viewStore.autoCreateVolumes) { volume in
                 Text(volume.name)
-                Text("\(volume.size)MB")
+                diskSizeView(viewStore: viewStore, volume: volume)
                 Text(volume.folders.joined(separator: ","))
                 
                 AutoCreateSpeedyDiskToggleView(toggle: volume.autoCreate) { value in
@@ -67,6 +71,43 @@ struct AutoCreateSpeedyDiskRowsView: View {
                     viewStore.send(.toggleSpotLight(volume: volume))
                 }
             }
+        }
+    }
+    
+    func isView(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> Bool {
+        guard let selectedVolumeId = viewStore.selectedVolumeId else {
+            print("selectedVolume is nil")
+            return false
+        }
+
+        print("Volume ID = \(volume.id) Selected = \(selectedVolumeId)")
+
+        return selectedVolumeId == volume.id
+    }
+    
+    @ViewBuilder func diskSizeView(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> some View {
+        if isView(viewStore: viewStore, volume: volume) {
+            TextField(
+              "",
+              text: viewStore.binding(
+                get: {$0.diskSize},
+                send: SpeedyDiskAction.diskSizeChanged
+              )
+            )
+            .focused($focusedField, equals: .diskSize)
+            .onSubmit {
+                focusedField = nil
+                viewStore.send(.resizeVolume(volume.id))
+            }
+
+        } else {
+            Button {
+                focusedField = .diskSize
+                viewStore.send(.volumeSelected(volume.id))
+            } label: {
+                Text("\(volume.size) MB")
+            }
+
         }
     }
 }

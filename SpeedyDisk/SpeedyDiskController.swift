@@ -30,7 +30,7 @@ class SpeedyDiskController {
         windowManager = WindowManager(store: self.store)
         createMainMenu()
     }
-    
+
     func createMainMenu() {
         // Check to see the app is in the login items
         let jobDicts = SMCopyAllJobDictionaries( kSMDomainUserLaunchd ).takeRetainedValue() as NSArray as! [[String:AnyObject]]

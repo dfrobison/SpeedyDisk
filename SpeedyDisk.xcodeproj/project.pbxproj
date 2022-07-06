@@ -30,6 +30,8 @@
 		910E11F12849B97B00035B59 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910E11F02849B97B00035B59 /* View+Extension.swift */; };
 		915DD69B287394150065B6A9 /* SpeedDiskLauncher.app in Resources */ = {isa = PBXBuildFile; fileRef = 91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */; };
 		915DD6A0287394950065B6A9 /* SpeedDiskLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9198FACF2875188C00134EE6 /* Sequence+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198FACE2875188C00134EE6 /* Sequence+Extension.swift */; };
+		9198FAD1287518E100134EE6 /* IdentifiedArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */; };
 		91D7A2E2286FEBEF00AFE9B0 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */; };
 		91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */; };
 /* End PBXBuildFile section */
@@ -91,6 +93,8 @@
 		910E11EE2849B67800035B59 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		910E11F02849B97B00035B59 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		91305EEB287285E600ADF6FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9198FACE2875188C00134EE6 /* Sequence+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extension.swift"; sourceTree = "<group>"; };
+		9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedArray+Extension.swift"; sourceTree = "<group>"; };
 		91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCreateSpeedyDiskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,6 +197,8 @@
 			children = (
 				910E11DA2849AF9A00035B59 /* Notification+Extension.swift */,
 				910E11F02849B97B00035B59 /* View+Extension.swift */,
+				9198FACE2875188C00134EE6 /* Sequence+Extension.swift */,
+				9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -325,11 +331,13 @@
 			files = (
 				910E11E32849B22800035B59 /* SpeedyDiskEnvironment.swift in Sources */,
 				910E11D82849AEBF00035B59 /* AcitivityIndicator.swift in Sources */,
+				9198FACF2875188C00134EE6 /* Sequence+Extension.swift in Sources */,
 				910E11C72849AD5700035B59 /* CreateSpeedyDiskView.swift in Sources */,
 				910E11E12849B0CB00035B59 /* SpeedyDiskReducer.swift in Sources */,
 				910E11E52849B28000035B59 /* SpeedyDiskVolume.swift in Sources */,
 				910E11E72849B2C000035B59 /* Constants.swift in Sources */,
 				91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */,
+				9198FAD1287518E100134EE6 /* IdentifiedArray+Extension.swift in Sources */,
 				910E11DB2849AF9A00035B59 /* Notification+Extension.swift in Sources */,
 				910E11F12849B97B00035B59 /* View+Extension.swift in Sources */,
 				910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */,
@@ -377,7 +385,7 @@
 				CODE_SIGN_ENTITLEMENTS = SpeedDiskLauncher/SpeedDiskLauncher.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -407,7 +415,7 @@
 				CODE_SIGN_ENTITLEMENTS = SpeedDiskLauncher/SpeedDiskLauncher.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -552,7 +560,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDisk/Preview Content\"";
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -583,7 +591,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDisk/Preview Content\"";
 				DEVELOPMENT_TEAM = 9527LC56YN;
 				ENABLE_HARDENED_RUNTIME = YES;

@@ -7,34 +7,60 @@
 
 import ComposableArchitecture
 
+func selectVolume(state: inout SpeedyDiskState, volumeId: UUID) {
+    if state.selectedVolumeId != volumeId {
+        if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) {
+            state.diskSize = String(volume.size)
+            state.folders = volume.folders
+            state.autoCreate = volume.autoCreate
+            state.spotLight = volume.spotLight
+            state.warnOnEject = volume.warnOnEject
+            state.selectedVolumeId = volumeId
+            state.diskButtonPressed = false
+        }
+    }
+}
+
 
 let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnvironment> { state, action, environment in
-    
     switch action {
         case .binding:
             return .none
             
-        case .resizeVolume(let volumeId):
-            state.selectedVolumeId = nil
-            
+        case .recreateVolume(let volumeId):
             if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) {
-                if state.getDiskSize != volume.size {
-                    SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: state.getDiskSize)
-                    return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(names: [volume.name], recreate: true))
-                }
+                SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: state.getDiskSize)
+                SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: state.autoCreate)
+                SpeedyDiskManager.shared.setWarnOnEject(volumeId: volumeId, value: state.warnOnEject)
+                SpeedyDiskManager.shared.setSpotLight(volumeId: volumeId, value: state.spotLight)
+                SpeedyDiskManager.shared.setFolders(volumeId: volumeId, value: state.folders)
+                
+                return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(names: [volume.name], recreate: true))
             }
             
+            return .none
+            
+        case .toggleSpotLight(let volumeId):
+            selectVolume(state: &state, volumeId: volumeId)
+            state.spotLight.toggle()
+            return .none
+            
+        case .toggleWarnOnEject(let volumeId):
+            selectVolume(state: &state, volumeId: volumeId)
+            state.warnOnEject.toggle()
+            return .none
+            
+        case .toggleAutoCreate(let volumeId):
+            selectVolume(state: &state, volumeId: volumeId)
+            state.autoCreate.toggle()
+            return .none
+            
+        case .setButtonState(let keyPath, let value):
+            state[keyPath: keyPath] = value
             return .none
             
         case .volumeSelected(let volumeId):
-            if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) {
-                state.diskSize = String(volume.size)
-            }
-            state.selectedVolumeId = volumeId
-            return .none
-            
-        case .diskSizeChanged(let text):
-            state.diskSize = text
+            selectVolume(state: &state, volumeId: volumeId)
             return .none
             
         case .diskEjected(let path):
@@ -82,7 +108,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                                           autoCreate: state.autoCreate,
                                           spotLight: state.spotLight,
                                           warnOnEject: state.warnOnEject,
-                                          folders: state.folders.components(separatedBy: ","))
+                                          folders: state.folders)
             
             return Effect.future { callback in
                 SpeedyDiskManager.shared.createSpeedyDisk(volume: volume) { diskCreateError in
@@ -130,19 +156,6 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             SpeedyDiskManager.shared.deleteVolume(volume: volume)
             state.rebuildMenu = true
             return .none
-            
-        case .toggleAutoCreate(let volume):
-            SpeedyDiskManager.shared.toggleAutoCreate(volume: volume)
-            state.rebuildMenu = true
-            return .none
-            
-        case .toggleWarnOnEject(let volume):
-            SpeedyDiskManager.shared.toggleWarnOnEject(volume: volume)
-            return .none
-            
-        case .toggleSpotLight(let volume):
-            SpeedyDiskManager.shared.toggleSpotLight(volume: volume)
-            return .none
     }
 }
-    .binding()
+.binding()

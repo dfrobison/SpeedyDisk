@@ -13,7 +13,7 @@ struct SpeedyDiskVolume: Equatable, Codable, Identifiable {
     var autoCreate: Bool = false
     var spotLight: Bool = false
     var warnOnEject: Bool = false
-    var folders: [String] = []
+    var folders: String = ""
     
     enum CodingKeys: String, CodingKey {
         case name

@@ -14,10 +14,12 @@ struct SpeedyDiskState: Equatable {
     var selectedVolumeId: UUID?
     @BindableState var diskName = ""
     @BindableState var folders = ""
-    var diskSize = "64"
+    @BindableState var diskSize = "64"
     @BindableState var autoCreate = false
     @BindableState var warnOnEject = false
     @BindableState var spotLight = false
+    var diskButtonPressed = false
+    var folderButtonPressed = false
     
     var getDiskSize: UInt {
         if let diskSize = UInt(self.diskSize) {

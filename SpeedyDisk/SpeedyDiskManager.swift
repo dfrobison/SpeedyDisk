@@ -53,7 +53,7 @@ class SpeedyDiskManager {
                 if let name = vol["name"] as? String, let size = vol["size"] as? UInt, let spotLight = vol["spotLight"] as? Bool {
                     if !self.volumes.contains(where: {$0.name == name}) {
                         let warnOnEject = vol["warnOnEject"] as? Bool ?? false
-                        let folders = vol["folders"] as? [String] ?? []
+                        let folders = vol["folders"] as? String ?? ""
                         let volume = SpeedyDiskVolume(name: name,
                                                       size: size,
                                                       autoCreate: true,
@@ -67,22 +67,24 @@ class SpeedyDiskManager {
         }
     }
     
+    func setFolders(volumeId: UUID, value: String) {
+        self.volumes[id: volumeId]?.folders = value
+    }
+    
     func setDiskSize(volumeId: UUID, diskSize: UInt) {
         self.volumes[id: volumeId]?.size = diskSize
     }
-
     
-    func toggleWarnOnEject(volume: SpeedyDiskVolume) {
-        self.volumes[id: volume.id]?.warnOnEject.toggle()
+    func setWarnOnEject(volumeId: UUID, value: Bool) {
+        self.volumes[id: volumeId]?.warnOnEject = value
     }
     
-    func toggleSpotLight(volume: SpeedyDiskVolume) {
-        self.volumes[id: volume.id]?.spotLight.toggle()
+    func setSpotLight(volumeId: UUID, value: Bool) {
+        self.volumes[id: volumeId]?.spotLight = value
     }
     
-    func toggleAutoCreate(volume: SpeedyDiskVolume) {
-        self.volumes[id: volume.id]?.autoCreate.toggle()
-        self.saveAutoCreateVolumes()
+    func setAutoCreate(volumeId: UUID, value: Bool) {
+        self.volumes[id: volumeId]?.autoCreate = value
     }
     
     func deleteVolume(volume: SpeedyDiskVolume) {
@@ -207,7 +209,7 @@ class SpeedyDiskManager {
     }
     
     func createFolders(volume: SpeedyDiskVolume) {
-        for folder in volume.folders {
+        for folder in volume.folders.components(separatedBy: ",") {
             let path = "\(volume.path())/\(folder)"
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)

@@ -31,17 +31,13 @@ struct CreateSpeedyDiskView: View {
                     
                     TextField(
                       "",
-                      text: viewStore.binding(
-                        get: {$0.diskSize},
-                        send: SpeedyDiskAction.diskSizeChanged
-                      )
+                      text: viewStore.binding(\.$diskSize)
                     )
                     .frame(width: 50, alignment: .trailing)
                     .multilineTextAlignment(.trailing)
                     
                     Text( "MB")
                         .frame(maxWidth: .infinity, alignment: .leading)
-
                 }
                 
                 Text("Folders:")

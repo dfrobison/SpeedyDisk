@@ -8,176 +8,115 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct AutoCreateSpeedyDiskHeaderRowView: View {
-    let columns: [GridItem]
-    
-    var body: some View {
-        LazyVGrid(columns: columns) {
-            Group {
-                Text("Name")
-                    .underline()
-                Text("Size")
-                    .underline()
-                Text("Folders")
-                    .underline()
-                Text("AutoCreate")
-                    .underline()
-                Text("WarnOnEject")
-                    .underline()
-                Text("Spotlight")
-                    .underline()
-                Text("Action")
-                    .underline()
-            }
-            .font(.headline)
-        }
-    }
-}
-
 struct AutoCreateSpeedyDiskToggleView: View {
     @State var toggle: Bool
     let toggleAction: (Bool) -> Void
     
     var body: some View {
-        Toggle("", isOn: $toggle)
-            .toggleStyle(.checkbox)
-            .onChange(of: toggle) { value in
-                toggleAction(value)
-            }
+        HStack {
+            Spacer()
+            Toggle("", isOn: $toggle)
+                .toggleStyle(.checkbox)
+                .onChange(of: toggle) { value in
+                    toggleAction(value)
+                }
+            Spacer()
+        }
     }
 }
 
-struct AutoCreateSpeedyDiskRowsView: View {
-    let store: Store<SpeedyDiskState, SpeedyDiskAction>
-    private enum Field: Int, Hashable {
-        case diskSize
-        case folders
-    }
-    @FocusState private var focusedField: Field?
+struct EditDiskSizeView: View {
+    let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
+    let volume: SpeedyDiskVolume
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            ForEach(viewStore.autoCreateVolumes) { volume in
-                let getFromViewStore = isRowSelected(viewStore: viewStore, volume: volume)
-                
-                Text(volume.name)
-                
-                diskSizeView(viewStore: viewStore, volume: volume)
-                
-                folderView(viewStore: viewStore, volume: volume)
-                
-                AutoCreateSpeedyDiskToggleView(toggle: getFromViewStore ? viewStore.autoCreate : volume.autoCreate) { value in
-                    viewStore.send(.toggleAutoCreate(volumeId: volume.id))
-                }
-                
-                AutoCreateSpeedyDiskToggleView(toggle: getFromViewStore ? viewStore.warnOnEject : volume.warnOnEject) { value in
-                    viewStore.send(.toggleWarnOnEject(volumeId: volume.id))
-                }
-                
-                AutoCreateSpeedyDiskToggleView(toggle: getFromViewStore ? viewStore.spotLight : volume.spotLight) { value in
-                    viewStore.send(.toggleSpotLight(volumeId: volume.id))
-                }
-                
-                Button {
-                    viewStore.send(.recreateVolume(volumeId: volume.id))
-                } label: {
-                    Image(systemName: "repeat")
-                }
-                .disabled(!getFromViewStore)
-            }
-        }
-    }
-    
-    private func isRowSelected(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> Bool {
-        guard let selectedVolumeId = viewStore.selectedVolumeId else {
-            return false
-        }
-        
-        return selectedVolumeId == volume.id
-    }
-    
-    @ViewBuilder private func diskSizeView(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> some View {
-        if isRowSelected(viewStore: viewStore, volume: volume) && viewStore.diskButtonPressed {
-            HStack {
-                TextField(
-                    "",
-                    text: viewStore.binding(\.$diskSize)
-                )
-                .multilineTextAlignment(.trailing)
-                .focused($focusedField, equals: .diskSize)
-                .onSubmit {
-                    focusedField = nil
-                    viewStore.send(.setButtonState(\.diskButtonPressed, value: false))
-                }
-                Text("MB")
-            }
-            
-        } else {
-            Button {
-                focusedField = .diskSize
-                viewStore.send(.volumeSelected(volume.id))
-                viewStore.send(.setButtonState(\.diskButtonPressed, value: true))
-            } label: {
-                Text(isRowSelected(viewStore: viewStore, volume: volume) ? "\(viewStore.diskSize) MB" : "\(volume.size) MB")
-            }
-        }
-    }
-    
-    private func folderName(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> String {
-        let selected = self.isRowSelected(viewStore: viewStore, volume: volume)
-        let folders = selected ? "\(viewStore.folders)" : "\(volume.folders)"
-        
-        return folders.isEmpty ? "Add folders..." : folders
-    }
-    
-    @ViewBuilder private func folderView(viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>, volume: SpeedyDiskVolume) -> some View {
-        if isRowSelected(viewStore: viewStore, volume: volume) && viewStore.folderButtonPressed {
+        HStack {
             TextField(
                 "",
-                text: viewStore.binding(\.$folders)
+                text: viewStore.binding(
+                    get: { _ in
+                        String(volume.size)
+                        
+                    },
+                    send: { SpeedyDiskAction.diskSizeChanged($0, volume.id) }
+                )
             )
-            .focused($focusedField, equals: .folders)
-            .onSubmit {
-                focusedField = nil
-                viewStore.send(.setButtonState(\.folderButtonPressed, value: false))
-            }
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .multilineTextAlignment(.trailing)
             
-        } else {
-            Button {
-                focusedField = .folders
-                viewStore.send(.volumeSelected(volume.id))
-                viewStore.send(.setButtonState(\.folderButtonPressed, value: true))
-            } label: {
-                Text(folderName(viewStore: viewStore, volume: volume))
-            }
+            Text("MB")
+                .padding(.leading, -4)
         }
+    }
+}
+
+struct EditFolderView: View {
+    let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
+    let volume: SpeedyDiskVolume
+    
+    var body: some View {
+        TextField(
+            "",
+            text: viewStore.binding(
+                get: { _ in volume.folders},
+                send: { SpeedyDiskAction.foldersChanged($0, volume.id) }
+            ),
+            prompt: Text("Comma separated folder names")
+        )
+        .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }
 
 struct AutoCreateSpeedyDiskView: View {
     let store: Store<SpeedyDiskState, SpeedyDiskAction>
-    let columns = [
-        GridItem(.flexible(), alignment: .topLeading),
-        GridItem(.flexible(), alignment: .topLeading),
-        GridItem(.flexible(minimum: 150), alignment: .topLeading),
-        GridItem(.flexible(), alignment: .topLeading),
-        GridItem(.flexible(), alignment: .topLeading),
-        GridItem(.flexible(), alignment: .topLeading),
-        GridItem(.flexible(), alignment: .topLeading),
-    ]
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            ScrollView {
-                LazyVGrid(columns: columns, pinnedViews: [.sectionHeaders]) {
-                    Section(header: AutoCreateSpeedyDiskHeaderRowView(columns: self.columns)) {
-                        AutoCreateSpeedyDiskRowsView(store: store)
+            
+            Table(viewStore.editAutoCreateVolumes) {
+                TableColumn("Name", value: \.name)
+                
+                TableColumn("Size") { volume in
+                    EditDiskSizeView(viewStore: viewStore, volume: volume)
+                }
+                
+                TableColumn("Folders") { volume in
+                    EditFolderView(viewStore: viewStore, volume: volume)
+                }
+                .width(min: 75, ideal: 220, max: nil)
+                
+                TableColumn("AutoCreate") { volume in
+                    AutoCreateSpeedyDiskToggleView(toggle: volume.autoCreate) { value in
+                        viewStore.send(.toggleAutoCreate(volumeId: volume.id))
                     }
                 }
-                .padding()
+                .width(65)
+                
+                TableColumn("WarnOnEject") { volume in
+                    AutoCreateSpeedyDiskToggleView(toggle: volume.warnOnEject) { value in
+                        viewStore.send(.toggleWarnOnEject(volumeId: volume.id))
+                    }
+                }
+                .width(80)
+                
+                TableColumn("SpotLight") { volume in
+                    AutoCreateSpeedyDiskToggleView(toggle: volume.spotLight) { value in
+                        viewStore.send(.toggleSpotLight(volumeId: volume.id))
+                    }
+                }
+                .width(60)
+                
+                TableColumn("Actions") { volume in
+                    Button {
+                        viewStore.send(.recreateVolume(volumeId: volume.id))
+                    } label: {
+                        Image(systemName: "repeat")
+                    }
+                }
+            }
+            .onAppear {
+                viewStore.send(.prepareForEdit)
             }
         }
-        
-        Spacer()
     }
 }

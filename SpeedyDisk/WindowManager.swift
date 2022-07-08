@@ -68,7 +68,7 @@ class WindowManager: NSObject, NSWindowDelegate {
         
         if autoCreateManagerWindow == nil {
             let contentView = AutoCreateSpeedyDiskView(store: store)
-            let hostingCtrl = NSHostingController(rootView: contentView.frame(width: 800, height: 215))
+            let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 800, minHeight: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
             window.title = Constants.autoCreateSpeedyDisks
             autoCreateManagerWindow = NSWindowController(window: window)

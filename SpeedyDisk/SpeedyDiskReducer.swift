@@ -7,16 +7,10 @@
 
 import ComposableArchitecture
 
-func selectVolume(state: inout SpeedyDiskState, volumeId: UUID) {
+func selectVolume(state: inout SpeedyDiskState, volumeId: UUID)  {
     if state.selectedVolumeId != volumeId {
-        if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) {
-            state.diskSize = String(volume.size)
-            state.folders = volume.folders
-            state.autoCreate = volume.autoCreate
-            state.spotLight = volume.spotLight
-            state.warnOnEject = volume.warnOnEject
+        if state.editAutoCreateVolumes.first(where: {$0.id == volumeId}) != nil {
             state.selectedVolumeId = volumeId
-            state.diskButtonPressed = false
         }
     }
 }
@@ -27,13 +21,33 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
         case .binding:
             return .none
             
+        case .prepareForEdit:
+            state.editAutoCreateVolumes = state.autoCreateVolumes
+            return .none
+            
+        case .foldersChanged(let folders, let volumeId):
+            selectVolume(state: &state, volumeId: volumeId)
+            guard let selectedVolumeId = state.selectedVolumeId else { return .none }
+            state.editAutoCreateVolumes[id: selectedVolumeId]?.folders = folders
+            return .none
+
+            
+        case .diskSizeChanged(let diskSize, let volumeId):
+            selectVolume(state: &state, volumeId: volumeId)
+            guard let diskSize = UInt(diskSize), let selectedVolumeId = state.selectedVolumeId else { return .none }
+            let minDiskSize = diskSize < 10 ? 10 : diskSize
+            
+            state.editAutoCreateVolumes[id: selectedVolumeId]?.size = minDiskSize
+            return .none
+            
         case .recreateVolume(let volumeId):
-            if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) {
-                SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: state.getDiskSize)
-                SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: state.autoCreate)
-                SpeedyDiskManager.shared.setWarnOnEject(volumeId: volumeId, value: state.warnOnEject)
-                SpeedyDiskManager.shared.setSpotLight(volumeId: volumeId, value: state.spotLight)
-                SpeedyDiskManager.shared.setFolders(volumeId: volumeId, value: state.folders)
+            selectVolume(state: &state, volumeId: volumeId)
+            if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId), let editVolume = state.editAutoCreateVolumes.first(where: {$0.id == volumeId}) {
+                SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: editVolume.size)
+                SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: editVolume.autoCreate)
+                SpeedyDiskManager.shared.setWarnOnEject(volumeId: volumeId, value: editVolume.warnOnEject)
+                SpeedyDiskManager.shared.setSpotLight(volumeId: volumeId, value: editVolume.spotLight)
+                SpeedyDiskManager.shared.setFolders(volumeId: volumeId, value: editVolume.folders)
                 
                 return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(names: [volume.name], recreate: true))
             }
@@ -42,25 +56,19 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
         case .toggleSpotLight(let volumeId):
             selectVolume(state: &state, volumeId: volumeId)
-            state.spotLight.toggle()
+            state.editAutoCreateVolumes[id: volumeId]?.spotLight.toggle()
+
             return .none
             
         case .toggleWarnOnEject(let volumeId):
             selectVolume(state: &state, volumeId: volumeId)
-            state.warnOnEject.toggle()
-            return .none
+            state.editAutoCreateVolumes[id: volumeId]?.warnOnEject.toggle()
             
+            return .none
+
         case .toggleAutoCreate(let volumeId):
             selectVolume(state: &state, volumeId: volumeId)
-            state.autoCreate.toggle()
-            return .none
-            
-        case .setButtonState(let keyPath, let value):
-            state[keyPath: keyPath] = value
-            return .none
-            
-        case .volumeSelected(let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
+            state.editAutoCreateVolumes[id: volumeId]?.autoCreate.toggle()
             return .none
             
         case .diskEjected(let path):

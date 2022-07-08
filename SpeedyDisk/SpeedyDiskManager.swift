@@ -158,7 +158,7 @@ class SpeedyDiskManager {
         let group = DispatchGroup()
         let unmountVolumes = volumes.filter({ names.contains($0.name) })
         
-        // There are potential race conditions. Deleting cameras first from
+        // There are potential race conditions. Deleting volumes first from
         // master list
         unmountVolumes.forEach {volume in
             volumes.remove(volume)

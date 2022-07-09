@@ -52,7 +52,6 @@ struct SpeedyDiskVolume: Equatable, Codable, Identifiable {
         }
         return false
     }
-    
 }
 
 extension SpeedyDiskVolume {

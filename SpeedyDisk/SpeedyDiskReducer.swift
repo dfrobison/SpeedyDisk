@@ -7,41 +7,27 @@
 
 import ComposableArchitecture
 
-func selectVolume(state: inout SpeedyDiskState, volumeId: UUID)  {
-    if state.selectedVolumeId != volumeId {
-        if state.editAutoCreateVolumes.first(where: {$0.id == volumeId}) != nil {
-            state.selectedVolumeId = volumeId
-        }
-    }
-}
-
-
 let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnvironment> { state, action, environment in
     switch action {
         case .binding:
             return .none
             
         case .prepareForEdit:
-            state.editAutoCreateVolumes = state.autoCreateVolumes
+            state.editAutoCreateVolumes = state.volumes
             return .none
             
         case .foldersChanged(let folders, let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
-            guard let selectedVolumeId = state.selectedVolumeId else { return .none }
-            state.editAutoCreateVolumes[id: selectedVolumeId]?.folders = folders
+            state.editAutoCreateVolumes[id: volumeId]?.folders = folders
             return .none
 
-            
         case .diskSizeChanged(let diskSize, let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
-            guard let diskSize = UInt(diskSize), let selectedVolumeId = state.selectedVolumeId else { return .none }
-            let minDiskSize = diskSize < 10 ? 10 : diskSize
+            guard let diskSize = UInt(diskSize) else { return .none }
+            let minDiskSize = diskSize < 1 ? 1 : diskSize
             
-            state.editAutoCreateVolumes[id: selectedVolumeId]?.size = minDiskSize
+            state.editAutoCreateVolumes[id: volumeId]?.size = minDiskSize
             return .none
             
         case .recreateVolume(let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
             if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId), let editVolume = state.editAutoCreateVolumes.first(where: {$0.id == volumeId}) {
                 SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: editVolume.size)
                 SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: editVolume.autoCreate)
@@ -55,19 +41,16 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             return .none
             
         case .toggleSpotLight(let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
             state.editAutoCreateVolumes[id: volumeId]?.spotLight.toggle()
 
             return .none
             
         case .toggleWarnOnEject(let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
             state.editAutoCreateVolumes[id: volumeId]?.warnOnEject.toggle()
             
             return .none
 
         case .toggleAutoCreate(let volumeId):
-            selectVolume(state: &state, volumeId: volumeId)
             state.editAutoCreateVolumes[id: volumeId]?.autoCreate.toggle()
             return .none
             
@@ -139,6 +122,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                     state.rebuildMenu = true
                     state.closeCreateSpeedyDiskWindow = true
                     state.reset()
+                    state.editAutoCreateVolumes = state.volumes
                     return .none
                     
                 case .some(let failure):
@@ -163,7 +147,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: [volume.name], recreate: false)
             SpeedyDiskManager.shared.deleteVolume(volume: volume)
             state.rebuildMenu = true
-            return .none
+            return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
     }
 }
 .binding()

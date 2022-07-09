@@ -12,6 +12,7 @@ import IdentifiedCollections
 class SpeedyDiskManager {
     static let shared: SpeedyDiskManager = SpeedyDiskManager()
     var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
+    let lock = NSLock()
     
     var autoCreateVolumes: [SpeedyDiskVolume] {
         self.volumes.filter { volume in
@@ -122,8 +123,11 @@ class SpeedyDiskManager {
                 return onCreate(.failed)
             }
             
+            self.lock.lock()
             self.volumes.append(volume)
             self.volumes.sort(by: \.name)
+            self.lock.unlock()
+            
             self.createFolders(volume: volume)
 
             if let jsonData = try? JSONEncoder().encode(volume) {
@@ -156,26 +160,22 @@ class SpeedyDiskManager {
     
     func ejectSpeedyDisksWithName(names: [String], recreate: Bool) {
         let group = DispatchGroup()
-        let unmountVolumes = volumes.filter({ names.contains($0.name) })
         
-        // There are potential race conditions. Deleting volumes first from
-        // master list
-        unmountVolumes.forEach {volume in
-            volumes.remove(volume)
-        }
-        
-        for volume in unmountVolumes {
+        for volume in volumes.filter({ names.contains($0.name) }) {
             group.enter()
             
-            let ws = NSWorkspace()
             do {
-                try ws.unmountAndEjectDevice(at: volume.URL())
+                try NSWorkspace().unmountAndEjectDevice(at: volume.URL())
+                
+                self.lock.lock()
+                volumes.remove(id: volume.id)
+                self.lock.unlock()
+                
+                if recreate {
+                    createSpeedyDisk(volume: volume, onCreate: {_ in })
+                }
             } catch {
                 print(error)
-            }
-            
-            if recreate {
-                createSpeedyDisk(volume: volume, onCreate: {_ in })
             }
             
             group.leave()
@@ -200,8 +200,8 @@ class SpeedyDiskManager {
     func createSpeedyDisk(volume: SpeedyDiskVolume) -> Process {
         let task = Process()
         let diskSize = volume.size * 2048
-        let command = "diskutil partitionDisk `hdiutil attach -nomount ram://\(diskSize)` 1 GPTFormat APFS \"\(volume.name)\" \"100%\""
-        
+        //let command = "diskutil partitionDisk `hdiutil attach -nomount ram://\(diskSize)` 1 GPTFormat APFS \"\(volume.name)\" \"100%\""
+        let command = "diskutil eraseVolume HFS+ \"\(volume.name)\" `hdiutil attach -nomount ram://\(diskSize)`"
         task.arguments = ["-c", command]
         task.launchPath = Constants.shell
 

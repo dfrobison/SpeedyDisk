@@ -61,10 +61,12 @@ class WindowManager: NSObject, NSWindowDelegate {
         
         newSpeedyDiskWindow?.showWindow(nil)
         newSpeedyDiskWindow?.window?.makeKey()
+        autoCreateManagerWindow?.close()
     }
     
     func showAutoCreateManagerWindow() {
         NSApplication.shared.activate(ignoringOtherApps: true)
+        viewStore.send(.prepareForEdit)
         
         if autoCreateManagerWindow == nil {
             let contentView = AutoCreateSpeedyDiskView(store: store)

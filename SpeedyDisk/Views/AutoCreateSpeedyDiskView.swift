@@ -114,9 +114,6 @@ struct AutoCreateSpeedyDiskView: View {
                     }
                 }
             }
-            .onAppear {
-                viewStore.send(.prepareForEdit)
-            }
         }
     }
 }

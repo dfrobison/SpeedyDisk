@@ -45,7 +45,7 @@ class SpeedyDiskMenuItem: NSMenuItem {
             let button = NSButton(frame: NSRect(x: 110, y: 5, width: 15, height: 15))
             button.action = #selector(onRecreate(sender:))
             button.target = self
-            button.image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil)
+            button.image = NSImage(systemSymbol: SFSymbol.repeat)
             button.imagePosition = .imageOnly
             button.isBordered = false
             return button
@@ -56,7 +56,7 @@ class SpeedyDiskMenuItem: NSMenuItem {
             let button = NSButton(frame: NSRect(x: 130, y: 5, width: 15, height: 15))
             button.action = #selector(onEject(sender:))
             button.target = self
-            button.image = NSImage(systemSymbolName: "eject.fill", accessibilityDescription: nil)
+            button.image = NSImage(systemSymbol: SFSymbol.eject)
             button.imagePosition = .imageOnly
             button.isBordered = false
             return button
@@ -67,7 +67,7 @@ class SpeedyDiskMenuItem: NSMenuItem {
             let button = NSButton(frame: NSRect(x: 150, y: 5, width: 15, height: 15))
             button.action = #selector(onDelete(sender:))
             button.target = self
-            button.image = NSImage(systemSymbolName: "trash.fill", accessibilityDescription: nil)
+            button.image = NSImage(systemSymbol: SFSymbol.trash)
             button.isBordered = false
             return button
         }()

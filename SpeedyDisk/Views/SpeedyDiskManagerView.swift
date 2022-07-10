@@ -8,7 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct AutoCreateSpeedyDiskToggleView: View {
+struct SpeedyDiskToggleView: View {
     @State var toggle: Bool
     let toggleAction: (Bool) -> Void
     
@@ -67,13 +67,13 @@ struct EditFolderView: View {
     }
 }
 
-struct AutoCreateSpeedyDiskView: View {
+struct SpeedyDiskManagerView: View {
     let store: Store<SpeedyDiskState, SpeedyDiskAction>
     
     var body: some View {
         WithViewStore(store) { viewStore in
             
-            Table(viewStore.editAutoCreateVolumes) {
+            Table(viewStore.editVolumes) {
                 TableColumn("Name", value: \.name)
                 
                 TableColumn("Size") { volume in
@@ -86,31 +86,38 @@ struct AutoCreateSpeedyDiskView: View {
                 .width(min: 75, ideal: 220, max: nil)
                 
                 TableColumn("AutoCreate") { volume in
-                    AutoCreateSpeedyDiskToggleView(toggle: volume.autoCreate) { value in
+                    SpeedyDiskToggleView(toggle: volume.autoCreate) { value in
                         viewStore.send(.toggleAutoCreate(volumeId: volume.id))
                     }
                 }
                 .width(65)
                 
                 TableColumn("WarnOnEject") { volume in
-                    AutoCreateSpeedyDiskToggleView(toggle: volume.warnOnEject) { value in
+                    SpeedyDiskToggleView(toggle: volume.warnOnEject) { value in
                         viewStore.send(.toggleWarnOnEject(volumeId: volume.id))
                     }
                 }
                 .width(80)
                 
                 TableColumn("SpotLight") { volume in
-                    AutoCreateSpeedyDiskToggleView(toggle: volume.spotLight) { value in
+                    SpeedyDiskToggleView(toggle: volume.spotLight) { value in
                         viewStore.send(.toggleSpotLight(volumeId: volume.id))
                     }
                 }
                 .width(60)
                 
                 TableColumn("Actions") { volume in
-                    Button {
-                        viewStore.send(.recreateVolume(volumeId: volume.id))
-                    } label: {
-                        Image(systemName: "repeat")
+                    HStack {
+                        Button {
+                            viewStore.send(.recreateVolume(volumeId: volume.id))
+                        } label: {
+                            Image(systemSymbol: SFSymbol.repeat)
+                        }
+                        Button {
+                            viewStore.send(.deleteVolume(volume: volume))
+                        } label: {
+                            Image(systemSymbol: SFSymbol.trash)
+                        }
                     }
                 }
             }

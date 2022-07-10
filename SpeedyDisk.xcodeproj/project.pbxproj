@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D32267B287A6AC600BCD80F /* Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32267A287A6AC600BCD80F /* Image+Extension.swift */; };
+		3D32267E287A6B2000BCD80F /* SFSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32267D287A6B2000BCD80F /* SFSymbol.swift */; };
+		3D322680287A704B00BCD80F /* NSImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32267F287A704B00BCD80F /* NSImage+Extension.swift */; };
 		91004A902873916200AE7EB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91004A8F2873916200AE7EB7 /* AppDelegate.swift */; };
 		91004A942873916300AE7EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91004A932873916300AE7EB7 /* Assets.xcassets */; };
 		91004A972873916300AE7EB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91004A952873916300AE7EB7 /* Main.storyboard */; };
@@ -33,7 +36,7 @@
 		9198FACF2875188C00134EE6 /* Sequence+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198FACE2875188C00134EE6 /* Sequence+Extension.swift */; };
 		9198FAD1287518E100134EE6 /* IdentifiedArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */; };
 		91D7A2E2286FEBEF00AFE9B0 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */; };
-		91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */; };
+		91E69DDC284D6A4E0053CF0D /* SpeedyDiskManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69DDB284D6A4E0053CF0D /* SpeedyDiskManagerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +70,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D32267A287A6AC600BCD80F /* Image+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Extension.swift"; sourceTree = "<group>"; };
+		3D32267D287A6B2000BCD80F /* SFSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbol.swift; sourceTree = "<group>"; };
+		3D32267F287A704B00BCD80F /* NSImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extension.swift"; sourceTree = "<group>"; };
 		91004A8D2873916200AE7EB7 /* SpeedDiskLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedDiskLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91004A8F2873916200AE7EB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91004A932873916300AE7EB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,7 +102,7 @@
 		9198FACE2875188C00134EE6 /* Sequence+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extension.swift"; sourceTree = "<group>"; };
 		9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentifiedArray+Extension.swift"; sourceTree = "<group>"; };
 		91D7A2E1286FEBEF00AFE9B0 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
-		91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCreateSpeedyDiskView.swift; sourceTree = "<group>"; };
+		91E69DDB284D6A4E0053CF0D /* SpeedyDiskManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedyDiskManagerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D32267C287A6B0400BCD80F /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				910E11E62849B2C000035B59 /* Constants.swift */,
+				3D32267D287A6B2000BCD80F /* SFSymbol.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		3D322681287A714800BCD80F /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				910E11DC2849AFF100035B59 /* SpeedyDiskState.swift */,
+				910E11DE2849B04700035B59 /* SpeedyDiskAction.swift */,
+				910E11E02849B0CB00035B59 /* SpeedyDiskReducer.swift */,
+				910E11E22849B22800035B59 /* SpeedyDiskEnvironment.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		3D322682287A71A700BCD80F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				910E11E42849B28000035B59 /* SpeedyDiskVolume.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3D322683287A71CB00BCD80F /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				910E11E82849B33C00035B59 /* SpeedyDiskManager.swift */,
+				910E11EE2849B67800035B59 /* WindowManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		3D322684287A727C00BCD80F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				910E11EC2849B59700035B59 /* SpeedyDiskController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		91004A8E2873916200AE7EB7 /* SpeedDiskLauncher */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,23 +204,18 @@
 		910E11C32849AD5700035B59 /* SpeedyDisk */ = {
 			isa = PBXGroup;
 			children = (
+				3D322684287A727C00BCD80F /* Controllers */,
+				3D322683287A71CB00BCD80F /* Managers */,
+				3D322682287A71A700BCD80F /* Models */,
+				3D322681287A714800BCD80F /* TCA */,
 				91305EEB287285E600ADF6FE /* Info.plist */,
+				3D32267C287A6B0400BCD80F /* Utilities */,
 				910E11D92849AF8500035B59 /* Extensions */,
 				910E11D62849AE3500035B59 /* Views */,
 				910E11C42849AD5700035B59 /* SpeedyDiskApp.swift */,
 				910E11C82849AD5900035B59 /* Assets.xcassets */,
 				910E11CD2849AD5900035B59 /* SpeedyDisk.entitlements */,
 				910E11CA2849AD5900035B59 /* Preview Content */,
-				910E11DC2849AFF100035B59 /* SpeedyDiskState.swift */,
-				910E11DE2849B04700035B59 /* SpeedyDiskAction.swift */,
-				910E11E02849B0CB00035B59 /* SpeedyDiskReducer.swift */,
-				910E11E22849B22800035B59 /* SpeedyDiskEnvironment.swift */,
-				910E11E42849B28000035B59 /* SpeedyDiskVolume.swift */,
-				910E11E62849B2C000035B59 /* Constants.swift */,
-				910E11E82849B33C00035B59 /* SpeedyDiskManager.swift */,
-				910E11EA2849B43A00035B59 /* SpeedyDiskMenuItem.swift */,
-				910E11EC2849B59700035B59 /* SpeedyDiskController.swift */,
-				910E11EE2849B67800035B59 /* WindowManager.swift */,
 			);
 			path = SpeedyDisk;
 			sourceTree = "<group>";
@@ -185,9 +231,10 @@
 		910E11D62849AE3500035B59 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				910E11EA2849B43A00035B59 /* SpeedyDiskMenuItem.swift */,
 				910E11C62849AD5700035B59 /* CreateSpeedyDiskView.swift */,
 				910E11D72849AEBF00035B59 /* AcitivityIndicator.swift */,
-				91E69DDB284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift */,
+				91E69DDB284D6A4E0053CF0D /* SpeedyDiskManagerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -199,6 +246,8 @@
 				910E11F02849B97B00035B59 /* View+Extension.swift */,
 				9198FACE2875188C00134EE6 /* Sequence+Extension.swift */,
 				9198FAD0287518E100134EE6 /* IdentifiedArray+Extension.swift */,
+				3D32267A287A6AC600BCD80F /* Image+Extension.swift */,
+				3D32267F287A704B00BCD80F /* NSImage+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -329,17 +378,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D32267B287A6AC600BCD80F /* Image+Extension.swift in Sources */,
 				910E11E32849B22800035B59 /* SpeedyDiskEnvironment.swift in Sources */,
 				910E11D82849AEBF00035B59 /* AcitivityIndicator.swift in Sources */,
 				9198FACF2875188C00134EE6 /* Sequence+Extension.swift in Sources */,
+				3D322680287A704B00BCD80F /* NSImage+Extension.swift in Sources */,
 				910E11C72849AD5700035B59 /* CreateSpeedyDiskView.swift in Sources */,
 				910E11E12849B0CB00035B59 /* SpeedyDiskReducer.swift in Sources */,
 				910E11E52849B28000035B59 /* SpeedyDiskVolume.swift in Sources */,
 				910E11E72849B2C000035B59 /* Constants.swift in Sources */,
-				91E69DDC284D6A4E0053CF0D /* AutoCreateSpeedyDiskView.swift in Sources */,
+				91E69DDC284D6A4E0053CF0D /* SpeedyDiskManagerView.swift in Sources */,
 				9198FAD1287518E100134EE6 /* IdentifiedArray+Extension.swift in Sources */,
 				910E11DB2849AF9A00035B59 /* Notification+Extension.swift in Sources */,
 				910E11F12849B97B00035B59 /* View+Extension.swift in Sources */,
+				3D32267E287A6B2000BCD80F /* SFSymbol.swift in Sources */,
 				910E11C52849AD5700035B59 /* SpeedyDiskApp.swift in Sources */,
 				910E11EB2849B43A00035B59 /* SpeedyDiskMenuItem.swift in Sources */,
 				910E11EF2849B67800035B59 /* WindowManager.swift in Sources */,
@@ -386,7 +438,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 18;
-				DEVELOPMENT_TEAM = 9527LC56YN;
+				DEVELOPMENT_TEAM = DJKGA42ZBK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeedDiskLauncher/Info.plist;
@@ -416,7 +468,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 18;
-				DEVELOPMENT_TEAM = 9527LC56YN;
+				DEVELOPMENT_TEAM = DJKGA42ZBK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeedDiskLauncher/Info.plist;
@@ -562,7 +614,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"SpeedyDisk/Preview Content\"";
-				DEVELOPMENT_TEAM = 9527LC56YN;
+				DEVELOPMENT_TEAM = DJKGA42ZBK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

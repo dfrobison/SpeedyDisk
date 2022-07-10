@@ -16,6 +16,10 @@ class WindowManager: NSObject, NSWindowDelegate {
     private let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
     private var cancellable: AnyCancellable?
     
+    var isNewSpeedyDiskWindowVisible: Bool {
+        newSpeedyDiskWindow != nil
+    }
+    
     init(store: Store<SpeedyDiskState, SpeedyDiskAction>) {
         self.store = store
         self.viewStore = ViewStore(self.store)
@@ -69,10 +73,10 @@ class WindowManager: NSObject, NSWindowDelegate {
         viewStore.send(.prepareForEdit)
         
         if autoCreateManagerWindow == nil {
-            let contentView = AutoCreateSpeedyDiskView(store: store)
-            let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 800, minHeight: 215))
+            let contentView = SpeedyDiskManagerView(store: store)
+            let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 825, minHeight: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
-            window.title = Constants.autoCreateSpeedyDisks
+            window.title = Constants.speedyDiskManager
             autoCreateManagerWindow = NSWindowController(window: window)
             autoCreateManagerWindow?.window?.delegate = self
         }
@@ -84,7 +88,7 @@ class WindowManager: NSObject, NSWindowDelegate {
 
 extension WindowManager {
     struct Constants {
-        static let autoCreateSpeedyDisks = "AutoCreate Speedy Disks"
+        static let speedyDiskManager = "Speedy Disks"
         static let createSpeedyDisk = "Create Speedy Disk"
     }
 }

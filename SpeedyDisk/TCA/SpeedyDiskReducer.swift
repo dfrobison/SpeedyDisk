@@ -13,22 +13,22 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             return .none
             
         case .prepareForEdit:
-            state.editAutoCreateVolumes = state.volumes
+            state.editVolumes = state.volumes
             return .none
             
         case .foldersChanged(let folders, let volumeId):
-            state.editAutoCreateVolumes[id: volumeId]?.folders = folders
+            state.editVolumes[id: volumeId]?.folders = folders
             return .none
 
         case .diskSizeChanged(let diskSize, let volumeId):
             guard let diskSize = UInt(diskSize) else { return .none }
             let minDiskSize = diskSize < 1 ? 1 : diskSize
             
-            state.editAutoCreateVolumes[id: volumeId]?.size = minDiskSize
+            state.editVolumes[id: volumeId]?.size = minDiskSize
             return .none
             
         case .recreateVolume(let volumeId):
-            if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId), let editVolume = state.editAutoCreateVolumes.first(where: {$0.id == volumeId}) {
+            if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId), let editVolume = state.editVolumes.first(where: {$0.id == volumeId}) {
                 SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: editVolume.size)
                 SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: editVolume.autoCreate)
                 SpeedyDiskManager.shared.setWarnOnEject(volumeId: volumeId, value: editVolume.warnOnEject)
@@ -41,17 +41,17 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             return .none
             
         case .toggleSpotLight(let volumeId):
-            state.editAutoCreateVolumes[id: volumeId]?.spotLight.toggle()
+            state.editVolumes[id: volumeId]?.spotLight.toggle()
 
             return .none
             
         case .toggleWarnOnEject(let volumeId):
-            state.editAutoCreateVolumes[id: volumeId]?.warnOnEject.toggle()
+            state.editVolumes[id: volumeId]?.warnOnEject.toggle()
             
             return .none
 
         case .toggleAutoCreate(let volumeId):
-            state.editAutoCreateVolumes[id: volumeId]?.autoCreate.toggle()
+            state.editVolumes[id: volumeId]?.autoCreate.toggle()
             return .none
             
         case .diskEjected(let path):
@@ -122,7 +122,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                     state.rebuildMenu = true
                     state.closeCreateSpeedyDiskWindow = true
                     state.reset()
-                    state.editAutoCreateVolumes = state.volumes
+                    state.editVolumes = state.volumes
                     return .none
                     
                 case .some(let failure):

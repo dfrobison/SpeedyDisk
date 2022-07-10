@@ -18,7 +18,7 @@ struct SpeedyDiskState: Equatable {
     @BindableState var autoCreate = false
     @BindableState var warnOnEject = false
     @BindableState var spotLight = false
-    var editAutoCreateVolumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
+    var editVolumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     
     var getDiskSize: UInt {
         if let diskSize = UInt(self.diskSize) {

@@ -159,26 +159,23 @@ class SpeedyDiskManager {
     }
     
     func ejectSpeedyDisksWithName(names: [String], recreate: Bool) {
-        let group = DispatchGroup()
         
         for volume in volumes.filter({ names.contains($0.name) }) {
-            group.enter()
+            let result = Result { try NSWorkspace().unmountAndEjectDevice(at: volume.URL()) }
             
-            do {
-                try NSWorkspace().unmountAndEjectDevice(at: volume.URL())
-                
-                self.lock.lock()
-                volumes.remove(id: volume.id)
-                self.lock.unlock()
-                
-                if recreate {
-                    createSpeedyDisk(volume: volume, onCreate: {_ in })
-                }
-            } catch {
-                print(error)
+            switch result {
+                case .success:
+                    self.lock.lock()
+                    volumes.remove(id: volume.id)
+                    self.lock.unlock()
+                    
+                    if recreate {
+                        createSpeedyDisk(volume: volume, onCreate: {_ in })
+                    }
+
+                case .failure(let message):
+                    print(message)
             }
-            
-            group.leave()
         }
     }
     

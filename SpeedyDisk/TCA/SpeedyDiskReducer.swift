@@ -68,8 +68,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                 case .busy:
                     return Effect<SpeedyDiskAction, Never>(value: .cantDeleteVolume)
                 default:
-                    break
-                    
+                    state.alert = .init(title: TextState("Speedy Disk Error"), message: TextState("Operation can't be performed"))
             }
             
             return .none

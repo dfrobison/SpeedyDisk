@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import AppKit
 
 let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnvironment> { state, action, environment in
     switch action {
@@ -61,8 +62,16 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             return .none
             
         case .ejectSpeedyDisksWithName(let names, let recreate):
-            SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: names, recreate: recreate)
-            state.rebuildMenu = true
+            switch SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: names, recreate: recreate) {
+                case .ejected:
+                    state.rebuildMenu = true
+                case .busy:
+                    return Effect<SpeedyDiskAction, Never>(value: .cantDeleteVolume)
+                default:
+                    break
+                    
+            }
+            
             return .none
             
         case .openCreateSpeedyDiskWindow:
@@ -112,6 +121,11 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
         case .alertDismissedTapped:
             state.alert = nil
+            state.resignFirstResponder = true
+            return .none
+            
+        case .resignFirstReponderCompleted:
+            state.resignFirstResponder = false
             return .none
             
         case .createSpeedyDiskStatus(let status):
@@ -143,11 +157,19 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                     
                     return .none
             }
+            
         case .deleteVolume(let volume):
-            SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: [volume.name], recreate: false)
-            SpeedyDiskManager.shared.deleteVolume(volume: volume)
-            state.rebuildMenu = true
-            return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
+            if SpeedyDiskManager.shared.ejectSpeedyDisksWithName(names: [volume.name], recreate: false) == .ejected {
+                SpeedyDiskManager.shared.deleteVolume(volume: volume)
+                state.rebuildMenu = true
+                return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
+            }
+            return Effect<SpeedyDiskAction, Never>(value: .cantDeleteVolume)
+            
+        case .cantDeleteVolume:
+            state.alert = .init(title: TextState("Speedy Disk Error"), message: TextState("Disk busy -- operation can't be performed"))
+            return .none
+            
     }
 }
 .binding()

@@ -9,10 +9,16 @@ import Foundation
 import AppKit
 import IdentifiedCollections
 
+
 class SpeedyDiskManager {
     static let shared: SpeedyDiskManager = SpeedyDiskManager()
-    var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     let lock = NSLock()
+    var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
+    enum Eject {
+        case ejected
+        case busy
+        case undefined
+    }
     
     var autoCreateVolumes: [SpeedyDiskVolume] {
         self.volumes.filter { volume in
@@ -158,7 +164,8 @@ class SpeedyDiskManager {
                                       recreate: recreate)
     }
     
-    func ejectSpeedyDisksWithName(names: [String], recreate: Bool) {
+    @discardableResult
+    func ejectSpeedyDisksWithName(names: [String], recreate: Bool) -> Eject {
         
         for volume in volumes.filter({ names.contains($0.name) }) {
             let result = Result { try NSWorkspace().unmountAndEjectDevice(at: volume.URL()) }
@@ -175,8 +182,16 @@ class SpeedyDiskManager {
 
                 case .failure(let message):
                     print(message)
+
+                    if message.localizedDescription.contains("-47") {
+                        return .busy
+                    }
+                    
+                    return .undefined
             }
         }
+        
+        return .ejected
     }
     
     /*

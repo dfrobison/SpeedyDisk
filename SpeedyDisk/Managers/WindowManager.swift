@@ -8,6 +8,7 @@ import AppKit
 import ComposableArchitecture
 import Combine
 import SwiftUI
+import CoreAudio
 
 class WindowManager: NSObject, NSWindowDelegate {
     private var newSpeedyDiskWindow: NSWindowController? = nil
@@ -80,9 +81,34 @@ class WindowManager: NSObject, NSWindowDelegate {
             autoCreateManagerWindow = NSWindowController(window: window)
             autoCreateManagerWindow?.window?.delegate = self
         }
-
+        
         autoCreateManagerWindow?.showWindow(nil)
         autoCreateManagerWindow?.window?.makeKey()
+    }
+    
+    func endEditing(view: NSView) {
+        for subView in view.subviews {
+            if let s = subView as? NSTextField {
+                s.endEditing(NSText())
+            } else {
+                endEditing(view: subView)
+            }
+        }
+    }
+    
+    // The only way I can figure out how to stop the edit fields from being
+    // activity is to first each one and tell it to stop editing. This
+    // effective resigns the first responder.
+    func resignFirstReponder() {
+        if autoCreateManagerWindow != nil {
+            if let subViews = autoCreateManagerWindow?.window?.contentView?.subviews {
+                for subView in subViews {
+                    endEditing(view: subView)
+                }
+            }
+        }
+        
+        viewStore.send(.resignFirstReponderCompleted)
     }
 }
 

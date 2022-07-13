@@ -27,4 +27,6 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case prepareForEdit
     case diskSizeChanged(String, UUID)
     case foldersChanged(String, UUID)
+    case cantDeleteVolume
+    case resignFirstReponderCompleted
 }

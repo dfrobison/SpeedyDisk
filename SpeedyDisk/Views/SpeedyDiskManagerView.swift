@@ -5,6 +5,7 @@
 //  Created by Doug on 6/5/22.
 //
 
+
 import SwiftUI
 import ComposableArchitecture
 
@@ -121,6 +122,9 @@ struct SpeedyDiskManagerView: View {
                     }
                 }
             }
+            .alert(
+                self.store.scope(state: \.alert), dismiss: .alertDismissedTapped
+            )
         }
     }
 }

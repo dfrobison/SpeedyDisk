@@ -15,6 +15,7 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     private let store: Store<SpeedyDiskState, SpeedyDiskAction>
     private let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
     private var cancellable: AnyCancellable?
+    private var resignCancellable: AnyCancellable?
     private var statusItem = NSStatusBar.system.statusItem(withLength: 28.0)
     private var statusMenu = NSMenu()
     private var currentSpeedyDiskMenu: NSMenu = NSMenu()
@@ -95,6 +96,13 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
                     self.rebuild()
                 }
             })
+        
+        resignCancellable = viewStore.publisher.resignFirstResponder
+                    .sink(receiveValue: { resign in
+                        if resign {
+                            self.windowManager.resignFirstReponder()
+                        }
+                    })
     }
     
     // MARK: - Internal

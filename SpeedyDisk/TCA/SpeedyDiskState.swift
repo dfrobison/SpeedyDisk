@@ -8,6 +8,7 @@ import ComposableArchitecture
 
 struct SpeedyDiskState: Equatable {
     var rebuildMenu = false
+    var resignFirstResponder = false
     var closeCreateSpeedyDiskWindow = false
     var alert: AlertState<SpeedyDiskAction>?
     var showActivityIndicator = false

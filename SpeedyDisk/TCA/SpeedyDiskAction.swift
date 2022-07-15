@@ -30,7 +30,7 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case foldersChanged(String, UUID)
     case cantDeleteVolume
     case resignFirstReponderCompleted
-    case volumeEjected(delete: Bool)
+    case volumeEjected(delete: Bool, volumeId: UUID?)
     case volumeBusyError
     case volumeOperationError
     

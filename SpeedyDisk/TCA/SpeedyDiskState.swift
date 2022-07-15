@@ -12,8 +12,8 @@ struct SpeedyDiskState: Equatable {
     var closeCreateSpeedyDiskWindow = false
     var alert: AlertState<SpeedyDiskAction>?
     var showActivityIndicator = false
-    var selectedVolumeId: UUID?
     var volumeBeingEjected: String?
+    var changedVolumes: Set<UUID> = []
     @BindableState var diskName = ""
     @BindableState var folders = ""
     @BindableState var diskSize = "64"

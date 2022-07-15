@@ -19,6 +19,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
         case .foldersChanged(let folders, let volumeId):
             state.editVolumes[id: volumeId]?.folders = folders
+            state.changedVolumes.insert(volumeId)
             return .none
 
         case .diskSizeChanged(let diskSize, let volumeId):
@@ -26,6 +27,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             let minDiskSize = diskSize < 1 ? 1 : diskSize
             
             state.editVolumes[id: volumeId]?.size = minDiskSize
+            state.changedVolumes.insert(volumeId)
             return .none
             
         case .recreateVolume(let volumeId):
@@ -33,9 +35,6 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
             if let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId), let editVolume = state.editVolumes.first(where: {$0.id == volumeId}) {
                 SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: editVolume.size)
-                SpeedyDiskManager.shared.setAutoCreate(volumeId: volumeId, value: editVolume.autoCreate)
-                SpeedyDiskManager.shared.setWarnOnEject(volumeId: volumeId, value: editVolume.warnOnEject)
-                SpeedyDiskManager.shared.setSpotLight(volumeId: volumeId, value: editVolume.spotLight)
                 SpeedyDiskManager.shared.setFolders(volumeId: volumeId, value: editVolume.folders)
                 
                 return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(name: volume.name, recreate: true))
@@ -74,7 +73,10 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             }
             return .none
             
-        case .volumeEjected(let delete):
+        case .volumeEjected(let delete, let volumeId):
+            if let volumeId = volumeId {
+                state.changedVolumes.remove(volumeId)
+            }
             state.volumeBeingEjected = nil
             state.rebuildMenu = true
             return delete ? Effect<SpeedyDiskAction, Never>(value: .volumeDeleted) : .none
@@ -92,16 +94,17 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             if let volumeBeingEject = state.volumeBeingEjected, volumeBeingEject == name {
                 return .none
             }
-                
+            
             state.volumeBeingEjected = name
             
             return Effect.task {
                 do {
+                    let changedVolumeId = SpeedyDiskManager.shared.getVolume(name: name)?.id
                     let result = try await SpeedyDiskManager.shared.ejectSpeedyDisksWithName(name: name, recreate: recreate)
                     
                     switch result {
                         case .ejected:
-                            return .volumeEjected(delete: delete)
+                            return .volumeEjected(delete: delete, volumeId: changedVolumeId)
                         case .noDiskFound, .undefined:
                             return .volumeOperationError
                         case .busy:

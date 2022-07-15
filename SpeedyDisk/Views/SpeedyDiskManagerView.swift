@@ -68,6 +68,29 @@ struct EditFolderView: View {
     }
 }
 
+struct ButtonActionView: View {
+    let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
+    let volume: SpeedyDiskVolume
+    
+    var body: some View {
+        HStack {
+            Button {
+                viewStore.send(.recreateVolume(volumeId: volume.id))
+            } label: {
+                Image(systemSymbol: SFSymbol.repeat)
+            }
+            .disabled(!viewStore.changedVolumes.contains(volume.id))
+            
+            Button {
+                viewStore.send(.deleteVolume(volumeId: volume.id))
+            } label: {
+                Image(systemSymbol: SFSymbol.trash)
+            }
+        }
+    }
+}
+
+
 struct SpeedyDiskManagerView: View {
     let store: Store<SpeedyDiskState, SpeedyDiskAction>
     
@@ -108,18 +131,7 @@ struct SpeedyDiskManagerView: View {
                 .width(60)
                 
                 TableColumn("Actions") { volume in
-                    HStack {
-                        Button {
-                            viewStore.send(.recreateVolume(volumeId: volume.id))
-                        } label: {
-                            Image(systemSymbol: SFSymbol.repeat)
-                        }
-                        Button {
-                            viewStore.send(.deleteVolume(volumeId: volume.id))
-                        } label: {
-                            Image(systemSymbol: SFSymbol.trash)
-                        }
-                    }
+                    ButtonActionView(viewStore: viewStore, volume: volume)
                 }
             }
             .alert(

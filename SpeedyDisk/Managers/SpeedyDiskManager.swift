@@ -55,6 +55,11 @@ class SpeedyDiskManager {
         volumes.first(where: {$0.id == volumeId})
     }
     
+    func getVolume(name: String) -> SpeedyDiskVolume? {
+        volumes.first(where: {$0.name == name})
+    }
+
+    
     func restoreAutoCreateVolumes() {
         if let autoCreate = UserDefaults.standard.object(forKey: Constants.autoCreate) as? [Dictionary<String, Any>] {
             for vol in autoCreate {
@@ -167,7 +172,7 @@ class SpeedyDiskManager {
     }
     
     func ejectSpeedyDisksWithName(name: String, recreate: Bool, completion: @escaping (Result<Eject, Error>) -> Void) {
-        guard let volume = volumes.filter({ name == $0.name }).first else {
+        guard let volume = getVolume(name: name) else {
             completion(.success(.noDiskFound))
             return
         }
@@ -180,8 +185,7 @@ class SpeedyDiskManager {
                 }
             )
             
-            do {
-                try await unmountTask.value
+            let removeVolume = {
                 self.lock.lock()
                 self.volumes.remove(id: volume.id)
                 self.lock.unlock()
@@ -189,12 +193,20 @@ class SpeedyDiskManager {
                 if recreate {
                     self.createSpeedyDisk(volume: volume, onCreate: {_ in })
                 }
+            }
+            
+            do {
+                try await unmountTask.value
+                removeVolume()
                 completion(.success(.ejected))
             } catch {
                 if error.localizedDescription.contains("-47") {
                     completion(.success(.busy))
                 }
-                else {
+                else if error.localizedDescription.contains("-36"){
+                    removeVolume()
+                    completion(.success(.ejected))
+                } else {
                     completion(.success(.undefined))
                 }
             }

@@ -115,7 +115,7 @@ struct SpeedyDiskManagerView: View {
                             Image(systemSymbol: SFSymbol.repeat)
                         }
                         Button {
-                            viewStore.send(.deleteVolume(volume: volume))
+                            viewStore.send(.deleteVolume(volumeId: volume.id))
                         } label: {
                             Image(systemSymbol: SFSymbol.trash)
                         }

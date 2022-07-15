@@ -15,6 +15,7 @@ class SpeedyDiskManager {
     let lock = NSLock()
     var volumes: IdentifiedArrayOf<SpeedyDiskVolume> = []
     enum Eject {
+        case noDiskFound
         case ejected
         case busy
         case undefined
@@ -88,18 +89,24 @@ class SpeedyDiskManager {
     
     func setSpotLight(volumeId: UUID, value: Bool) {
         self.volumes[id: volumeId]?.spotLight = value
+        self.indexVolume(volume: self.volumes[id: volumeId], state: value)
     }
     
     func setAutoCreate(volumeId: UUID, value: Bool) {
         self.volumes[id: volumeId]?.autoCreate = value
+        self.saveAutoCreateVolumes()
     }
     
     func deleteVolume(volume: SpeedyDiskVolume) {
         self.volumes.remove(volume)
+        self.volumeDeleted()
+    }
+    
+    func volumeDeleted() {
         self.saveAutoCreateVolumes()
     }
     
-    func saveAutoCreateVolumes() {
+    private func saveAutoCreateVolumes() {
         UserDefaults.standard.set(autoCreateVolumes.map { $0.dictionary() },
                                   forKey: Constants.autoCreate)
     }
@@ -135,14 +142,14 @@ class SpeedyDiskManager {
             self.lock.unlock()
             
             self.createFolders(volume: volume)
-
+            
             if let jsonData = try? JSONEncoder().encode(volume) {
                 let jsonString = String(data: jsonData, encoding: .utf8)!
                 try? jsonString.write(toFile: "\(volume.path())/\(AppConstants.diskInfoFile)", atomically: true, encoding: .utf8)
             }
             
             if volume.spotLight {
-                self.indexVolume(volume: volume)
+                self.indexVolume(volume: volume, state: true)
             }
             
             if volume.autoCreate {
@@ -159,39 +166,48 @@ class SpeedyDiskManager {
         }
     }
     
-    func ejectAllSpeedyDisks(recreate: Bool) {
-        self.ejectSpeedyDisksWithName(names: self.volumes.map( \.name ),
-                                      recreate: recreate)
-    }
-    
-    @discardableResult
-    func ejectSpeedyDisksWithName(names: [String], recreate: Bool) -> Eject {
-        
-        for volume in volumes.filter({ names.contains($0.name) }) {
-            let result = Result { try NSWorkspace().unmountAndEjectDevice(at: volume.URL()) }
-            
-            switch result {
-                case .success:
-                    self.lock.lock()
-                    volumes.remove(id: volume.id)
-                    self.lock.unlock()
-                    
-                    if recreate {
-                        createSpeedyDisk(volume: volume, onCreate: {_ in })
-                    }
-
-                case .failure(let message):
-                    print(message)
-
-                    if message.localizedDescription.contains("-47") {
-                        return .busy
-                    }
-                    
-                    return .undefined
-            }
+    func ejectSpeedyDisksWithName(name: String, recreate: Bool, completion: @escaping (Result<Eject, Error>) -> Void) {
+        guard let volume = volumes.filter({ name == $0.name }).first else {
+            completion(.success(.noDiskFound))
+            return
         }
         
-        return .ejected
+        Task {
+            let unmountTask = Task.detached(
+                priority: .userInitiated,
+                operation: { [volume] in
+                    try NSWorkspace().unmountAndEjectDevice(at: volume.URL())
+                }
+            )
+            
+            do {
+                try await unmountTask.value
+                self.lock.lock()
+                self.volumes.remove(id: volume.id)
+                self.lock.unlock()
+                
+                if recreate {
+                    self.createSpeedyDisk(volume: volume, onCreate: {_ in })
+                }
+                completion(.success(.ejected))
+            } catch {
+                if error.localizedDescription.contains("-47") {
+                    completion(.success(.busy))
+                }
+                else {
+                    completion(.success(.undefined))
+                }
+            }
+            
+        }
+    }
+    
+    func ejectSpeedyDisksWithName(name: String, recreate: Bool) async throws -> Eject {
+        return try await withCheckedThrowingContinuation { continuation in
+            ejectSpeedyDisksWithName(name: name, recreate: recreate) { result in
+                continuation.resume(with: result)
+            }
+        }
     }
     
     /*
@@ -216,7 +232,7 @@ class SpeedyDiskManager {
         let command = "diskutil eraseVolume HFS+ \"\(volume.name)\" `hdiutil attach -nomount ram://\(diskSize)`"
         task.arguments = ["-c", command]
         task.launchPath = Constants.shell
-
+        
         return task
     }
     
@@ -229,11 +245,15 @@ class SpeedyDiskManager {
         }
     }
     
-    func indexVolume(volume: SpeedyDiskVolume) {
+    func indexVolume(volume: SpeedyDiskVolume?, state: Bool) {
+        guard let volume = volume else {
+            return
+        }
+
         let task = Process()
         task.launchPath = Constants.shell
         
-        let command = "mdutil -i on \(volume.path())"
+        let command = "mdutil -i \(state ? "on" : "off") \(volume.path())"
         task.arguments = ["-c", command]
         task.launch()
     }

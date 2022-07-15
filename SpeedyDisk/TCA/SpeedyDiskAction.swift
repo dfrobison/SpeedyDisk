@@ -17,9 +17,10 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case rebuildMenuCompeleted
     case rebuildMenu
     case openCreateSpeedyDiskWindow
-    case ejectSpeedyDisksWithName(names: [String], recreate: Bool)
+    case ejectSpeedyDisksWithName(name: String, recreate: Bool, delete: Bool = false)
     case diskEjected(path: String?)
-    case deleteVolume(volume: SpeedyDiskVolume)
+    case deleteVolume(volumeId: UUID)
+    case volumeDeleted
     case recreateVolume(volumeId: UUID)
     case toggleAutoCreate(volumeId: UUID)
     case toggleWarnOnEject(volumeId: UUID)
@@ -29,4 +30,8 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case foldersChanged(String, UUID)
     case cantDeleteVolume
     case resignFirstReponderCompleted
+    case volumeEjected(delete: Bool)
+    case volumeBusyError
+    case volumeOperationError
+    
 }

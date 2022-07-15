@@ -22,8 +22,7 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
     private let launcherAppId = AppConstants.launcherAppId
     private let windowManager: WindowManager
     private let currentSpeedyDisksItem = NSMenuItem(title: NSLocalizedString("Current Speedy Disks", comment: ""), action: nil, keyEquivalent: "")
-    private let speedyDiskManagerItem = NSMenuItem(title: NSLocalizedString("Speedy Disk Manager", comment: ""), action: #selector(autoCreateManager(sender:)), keyEquivalent: "")
-    private let recreateAllItem = NSMenuItem(title: NSLocalizedString("Recreate All", comment: ""), action: #selector(recreateAll(sender:)), keyEquivalent: "")
+    private let speedyDiskManagerItem = NSMenuItem(title: NSLocalizedString("Speedy Disk Manager", comment: ""), action: #selector(speedyDiskManager(sender:)), keyEquivalent: "")
     
     init(store: Store<SpeedyDiskState, SpeedyDiskAction>) {
         self.store = store
@@ -56,10 +55,6 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
         // Existing SpeedDisk section
         statusMenu.addItem(currentSpeedyDisksItem)
         statusMenu.setSubmenu(self.currentSpeedyDiskMenu, for: currentSpeedyDisksItem)
-        
-        // Recreate All
-        statusMenu.addItem(recreateAllItem)
-        recreateAllItem.target = self
         
         // AutocreateManager
         statusMenu.addItem(speedyDiskManagerItem)
@@ -151,17 +146,17 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
                 self.statusMenu.cancelTracking()
             }, recreateHandler: {
                 if self.confirmEject(volume: volume) {
-                    self.viewStore.send(.ejectSpeedyDisksWithName(names: [volume.name], recreate: true))
+                    self.viewStore.send(.ejectSpeedyDisksWithName(name: volume.name, recreate: true))
                 }
                 self.statusMenu.cancelTracking()
             }, ejectHandler: {
                 if self.confirmEject(volume: volume) {
-                    self.viewStore.send(.ejectSpeedyDisksWithName(names: [volume.name], recreate: false))
+                    self.viewStore.send(.ejectSpeedyDisksWithName(name: volume.name, recreate: false))
                 }
                 self.statusMenu.cancelTracking()
             }, deleteHandler: {
                 if self.confirmDelete(volume: volume) {
-                    self.viewStore.send(.deleteVolume(volume: volume))
+                    self.viewStore.send(.deleteVolume(volumeId: volume.id))
                 }
                 self.statusMenu.cancelTracking()
             })
@@ -177,12 +172,8 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
         windowManager.showNewSpeedyDiskWindow()
     }
     
-    @objc func recreateAll(sender: AnyObject) {
-        SpeedyDiskManager.shared.ejectAllSpeedyDisks(recreate: true)
-    }
-    
-    @objc func autoCreateManager(sender: AnyObject) {
-        windowManager.showAutoCreateManagerWindow()
+    @objc func speedyDiskManager(sender: AnyObject) {
+        windowManager.showSpeedyDiskManagerWindow()
     }
     
     @objc func toggleStartOnLogin(sender: AnyObject) {

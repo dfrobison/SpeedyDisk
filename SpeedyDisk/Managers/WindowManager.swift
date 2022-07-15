@@ -12,7 +12,7 @@ import CoreAudio
 
 class WindowManager: NSObject, NSWindowDelegate {
     private var newSpeedyDiskWindow: NSWindowController? = nil
-    private var autoCreateManagerWindow: NSWindowController? = nil
+    private var sppeedyDiskManagerWindow: NSWindowController? = nil
     private let store: Store<SpeedyDiskState, SpeedyDiskAction>
     private let viewStore: ViewStore<SpeedyDiskState, SpeedyDiskAction>
     private var cancellable: AnyCancellable?
@@ -43,8 +43,8 @@ class WindowManager: NSObject, NSWindowDelegate {
                 case newSpeedyDiskWindow:
                     newSpeedyDiskWindow = nil
                     break
-                case autoCreateManagerWindow:
-                    autoCreateManagerWindow = nil
+                case sppeedyDiskManagerWindow:
+                    sppeedyDiskManagerWindow = nil
                     break
                 default:
                     return
@@ -66,48 +66,28 @@ class WindowManager: NSObject, NSWindowDelegate {
         
         newSpeedyDiskWindow?.showWindow(nil)
         newSpeedyDiskWindow?.window?.makeKey()
-        autoCreateManagerWindow?.close()
+        sppeedyDiskManagerWindow?.close()
     }
     
-    func showAutoCreateManagerWindow() {
+    func showSpeedyDiskManagerWindow() {
         NSApplication.shared.activate(ignoringOtherApps: true)
         viewStore.send(.prepareForEdit)
         
-        if autoCreateManagerWindow == nil {
+        if sppeedyDiskManagerWindow == nil {
             let contentView = SpeedyDiskManagerView(store: store)
             let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 825, minHeight: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
             window.title = Constants.speedyDiskManager
-            autoCreateManagerWindow = NSWindowController(window: window)
-            autoCreateManagerWindow?.window?.delegate = self
+            sppeedyDiskManagerWindow = NSWindowController(window: window)
+            sppeedyDiskManagerWindow?.window?.delegate = self
         }
         
-        autoCreateManagerWindow?.showWindow(nil)
-        autoCreateManagerWindow?.window?.makeKey()
+        sppeedyDiskManagerWindow?.showWindow(nil)
+        sppeedyDiskManagerWindow?.window?.makeKey()
     }
     
-    func endEditing(view: NSView) {
-        for subView in view.subviews {
-            if let s = subView as? NSTextField {
-                s.endEditing(NSText())
-            } else {
-                endEditing(view: subView)
-            }
-        }
-    }
-    
-    // The only way I can figure out how to stop the edit fields from being
-    // activity is to first each one and tell it to stop editing. This
-    // effective resigns the first responder.
     func resignFirstReponder() {
-        if autoCreateManagerWindow != nil {
-            if let subViews = autoCreateManagerWindow?.window?.contentView?.subviews {
-                for subView in subViews {
-                    endEditing(view: subView)
-                }
-            }
-        }
-        
+        sppeedyDiskManagerWindow?.window?.makeFirstResponder(nil)
         viewStore.send(.resignFirstReponderCompleted)
     }
 }

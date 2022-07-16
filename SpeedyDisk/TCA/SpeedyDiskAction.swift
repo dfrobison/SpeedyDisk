@@ -15,9 +15,8 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case createSpeedyDiskStatus(SpeedyDiskError?)
     case alertDismissedTapped
     case rebuildMenuCompeleted
-    case rebuildMenu
     case openCreateSpeedyDiskWindow
-    case ejectSpeedyDisksWithName(name: String, recreate: Bool, delete: Bool = false)
+    case ejectSpeedyDisk(volumeId: UUID, recreate: Bool, delete: Bool = false)
     case diskEjected(path: String?)
     case deleteVolume(volumeId: UUID)
     case volumeDeleted
@@ -33,5 +32,13 @@ enum SpeedyDiskAction: BindableAction, Equatable {
     case volumeEjected(delete: Bool, volumeId: UUID?)
     case volumeBusyError
     case volumeOperationError
-    
+    case prepareToShowSpeedyDiskManagerWindow
+    case speedyDiskMounted
+    case confirmEjection(volumeId: UUID)
+    case confirmEjectTapped(volumeId: UUID)
+    case confirmDeletion(volumeId: UUID)
+    case confirmDeletionTapped(volumeId: UUID)
+    case confirmRecreation(volumeId: UUID)
+    case confirmRecreationTapped(volumeId: UUID)
+
 }

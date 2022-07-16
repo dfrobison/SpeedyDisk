@@ -46,13 +46,13 @@ struct CreateSpeedyDiskView: View {
                 
                 Group {
                     Text("")
-                    Toggle("AutoCreate when RAMdisk Starts", isOn: viewStore.binding(\.$autoCreate))
+                    Toggle("AutoCreate when Speedy Disk Starts", isOn: viewStore.binding(\.$autoCreate))
                         .toggleStyle(.checkbox)
                     Text("")
                     Toggle("Spotlight Index Volume", isOn: viewStore.binding(\.$spotLight))
                         .toggleStyle(.checkbox)
                     Text("")
-                    Toggle("Warn on eject if RAMdisk has files", isOn: viewStore.binding(\.$warnOnEject))
+                    Toggle("Warn on eject if Speedy Disk has files", isOn: viewStore.binding(\.$warnOnEject))
                         .toggleStyle(.checkbox)
                 }
             }

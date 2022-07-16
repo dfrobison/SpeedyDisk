@@ -75,14 +75,20 @@ struct ButtonActionView: View {
     var body: some View {
         HStack {
             Button {
-                viewStore.send(.recreateVolume(volumeId: volume.id))
+                viewStore.send(.confirmRecreation(volumeId: volume.id))
             } label: {
                 Image(systemSymbol: SFSymbol.repeat)
             }
             .disabled(!viewStore.changedVolumes.contains(volume.id))
             
             Button {
-                viewStore.send(.deleteVolume(volumeId: volume.id))
+                viewStore.send(.confirmEjection(volumeId: volume.id))
+            } label: {
+                Image(systemSymbol: SFSymbol.eject)
+            }
+            
+            Button {
+                viewStore.send(.confirmDeletion(volumeId: volume.id))
             } label: {
                 Image(systemSymbol: SFSymbol.trash)
             }

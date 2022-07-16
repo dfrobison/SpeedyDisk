@@ -51,6 +51,10 @@ class SpeedyDiskManager {
     }
     
     // MARK: - SpeedyDiskManager API
+    func contains(volumeId: UUID) -> Bool {
+        self.volumes.contains(where: {volumeId == $0.id})
+    }
+    
     func getVolume(volumeId: UUID) -> SpeedyDiskVolume? {
         volumes.first(where: {$0.id == volumeId})
     }
@@ -172,7 +176,7 @@ class SpeedyDiskManager {
     }
     
     func ejectSpeedyDisksWithName(name: String, recreate: Bool, completion: @escaping (Result<Eject, Error>) -> Void) {
-        guard let volume = getVolume(name: name) else {
+        guard let volume = self.getVolume(name: name) else {
             completion(.success(.noDiskFound))
             return
         }
@@ -185,7 +189,7 @@ class SpeedyDiskManager {
                 }
             )
             
-            let removeVolume = {
+            let volumeEjected = {
                 self.lock.lock()
                 self.volumes.remove(id: volume.id)
                 self.lock.unlock()
@@ -193,19 +197,15 @@ class SpeedyDiskManager {
                 if recreate {
                     self.createSpeedyDisk(volume: volume, onCreate: {_ in })
                 }
+                completion(.success(.ejected))
             }
             
             do {
                 try await unmountTask.value
-                removeVolume()
-                completion(.success(.ejected))
+                volumeEjected()
             } catch {
                 if error.localizedDescription.contains("-47") {
                     completion(.success(.busy))
-                }
-                else if error.localizedDescription.contains("-36"){
-                    removeVolume()
-                    completion(.success(.ejected))
                 } else {
                     completion(.success(.undefined))
                 }
@@ -224,16 +224,17 @@ class SpeedyDiskManager {
     
     /*
      diskEjected takes a path and checks to see if it's a SpeedyDisk
-     If it is, remove it from the volumes and return true so we can refresh the menubar
+     If it is, remove it from the volumes and return
      */
     func diskEjected(path: String) -> SpeedyDiskVolume? {
-        for volume in self.volumes {
-            if volume.path() == path {
-                return volume
-            }
+        guard let volume = self.volumes.first(where: {$0.path() == path}) else {
+            return nil
         }
         
-        return nil
+        self.lock.lock()
+        self.volumes.remove(volume)
+        self.lock.unlock()
+        return volume
     }
     
     // MARK: - Helper functions

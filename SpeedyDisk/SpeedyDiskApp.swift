@@ -33,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         viewStore = ViewStore(store)
         
         NotificationCenter.default.addObserver(forName: .speedyDiskMounted, object: nil, queue: .main) { [weak self] notification in
-            self?.viewStore.send(.rebuildMenu)
+            self?.viewStore.send(.speedyDiskMounted)
         }
         
         NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didUnmountNotification, object: nil, queue: .main) { [weak self] notification in

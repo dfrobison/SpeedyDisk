@@ -13,8 +13,84 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
         case .binding:
             return .none
             
+            
+        case .confirmDeletionTapped(let volumeId):
+            return Effect<SpeedyDiskAction, Never>(value: .deleteVolume(volumeId: volumeId))
+            
+        case .confirmDeletion(let volumeId):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            
+            if volume.showWarning() {
+                state.alert = .init(title: TextState("Speedy Disk Warning"),
+                                    message: TextState("Are you sure you want to delete? Volume contains files."),
+                                    primaryButton: .destructive(TextState("Confirm"), action: .send(.confirmDeletionTapped(volumeId: volume.id))),
+                                    secondaryButton: .cancel(TextState("Cancel")))
+                return .none
+            }
+            
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: false))
+            
+        case .confirmEjectTapped(let volumeId):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: false))
+            
+        case .confirmEjection(let volumeId):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            
+            if volume.showWarning() {
+                state.alert = .init(title: TextState("Speedy Disk Warning"),
+                                    message: TextState("Volume contains files, are you sure you want to eject?"),
+                                    primaryButton: .destructive(TextState("Confirm"), action: .send(.confirmEjectTapped(volumeId: volume.id))),
+                                    secondaryButton: .cancel(TextState("Cancel")))
+                return .none
+            }
+            
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: false))
+            
+        case .confirmRecreationTapped(let volumeId):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            return Effect<SpeedyDiskAction, Never>(value: .recreateVolume(volumeId: volume.id))
+            
+        case .confirmRecreation(let volumeId):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            
+            if volume.showWarning() {
+                state.alert = .init(title: TextState("Speedy Disk Warning"),
+                                    message: TextState("Volume contains files, are you sure you want to recreate?"),
+                                    primaryButton: .destructive(TextState("Confirm"), action: .send(.confirmRecreationTapped(volumeId: volume.id))),
+                                    secondaryButton: .cancel(TextState("Cancel")))
+                return .none
+            }
+            
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: true))
+
+            
+        case .speedyDiskMounted:
+            state.rebuildMenu = true
+            return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
+            
+        case .prepareToShowSpeedyDiskManagerWindow:
+            state.changedVolumes = []
+            return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
+            
         case .prepareForEdit:
             state.editVolumes = state.volumes
+            
+            // Only keep vaild volumes
+            state.changedVolumes = state.changedVolumes.filter {volumeId in
+                SpeedyDiskManager.shared.contains(volumeId: volumeId)
+            }
+            
             return .none
             
         case .foldersChanged(let folders, let volumeId):
@@ -37,7 +113,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                 SpeedyDiskManager.shared.setDiskSize(volumeId: volumeId, diskSize: editVolume.size)
                 SpeedyDiskManager.shared.setFolders(volumeId: volumeId, value: editVolume.folders)
                 
-                return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(name: volume.name, recreate: true))
+                return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volumeId, recreate: true))
             }
             
             return .none
@@ -68,10 +144,17 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             return .none
             
         case .diskEjected(let path):
-            if let path = path, let volume = SpeedyDiskManager.shared.diskEjected(path: path) {
-                return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(name: volume.name, recreate: false))
+            guard let path = path,
+                  let volume = SpeedyDiskManager.shared.diskEjected(path: path)
+            else {
+                return .none
             }
-            return .none
+            
+            if let volumeBeingEject = state.volumeBeingEjected, volumeBeingEject == volume.name {
+                return .none
+            }
+
+            return Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
             
         case .volumeEjected(let delete, let volumeId):
             if let volumeId = volumeId {
@@ -79,7 +162,8 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             }
             state.volumeBeingEjected = nil
             state.rebuildMenu = true
-            return delete ? Effect<SpeedyDiskAction, Never>(value: .volumeDeleted) : .none
+            return delete ? Effect<SpeedyDiskAction, Never>(value: .volumeDeleted)
+                            : Effect<SpeedyDiskAction, Never>(value: .prepareForEdit)
             
         case .volumeBusyError:
             state.volumeBeingEjected = nil
@@ -90,7 +174,13 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             state.alert = .init(title: TextState("Speedy Disk Error"), message: TextState("Operation can't be performed"))
             return .none
             
-        case .ejectSpeedyDisksWithName(let name, let recreate, let delete):
+        case .ejectSpeedyDisk(let volumeId, let recreate, let delete):
+            guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
+                return .none
+            }
+            
+            let name = volume.name
+            
             if let volumeBeingEject = state.volumeBeingEjected, volumeBeingEject == name {
                 return .none
             }
@@ -99,12 +189,11 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
             return Effect.task {
                 do {
-                    let changedVolumeId = SpeedyDiskManager.shared.getVolume(name: name)?.id
                     let result = try await SpeedyDiskManager.shared.ejectSpeedyDisksWithName(name: name, recreate: recreate)
                     
                     switch result {
                         case .ejected:
-                            return .volumeEjected(delete: delete, volumeId: changedVolumeId)
+                            return .volumeEjected(delete: delete, volumeId: volumeId)
                         case .noDiskFound, .undefined:
                             return .volumeOperationError
                         case .busy:
@@ -121,10 +210,6 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             
         case .rebuildMenuCompeleted:
             state.rebuildMenu = false
-            return .none
-            
-        case .rebuildMenu:
-            state.rebuildMenu = true
             return .none
             
         case .incrementSpeedyDiskSize:
@@ -209,7 +294,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
             guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {
                 return .none
             }
-            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisksWithName(name: volume.name, recreate: false, delete: true))
+            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volumeId, recreate: false, delete: true))
             
         case .cantDeleteVolume:
             state.alert = .init(title: TextState("Speedy Disk Error"), message: TextState("Disk busy -- operation can't be performed"))

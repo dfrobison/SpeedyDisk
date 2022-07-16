@@ -146,12 +146,12 @@ class SpeedyDiskController: NSObject, NSMenuDelegate, NSMenuItemValidation {
                 self.statusMenu.cancelTracking()
             }, recreateHandler: {
                 if self.confirmEject(volume: volume) {
-                    self.viewStore.send(.ejectSpeedyDisksWithName(name: volume.name, recreate: true))
+                    self.viewStore.send(.ejectSpeedyDisk(volumeId: volume.id, recreate: true))
                 }
                 self.statusMenu.cancelTracking()
             }, ejectHandler: {
                 if self.confirmEject(volume: volume) {
-                    self.viewStore.send(.ejectSpeedyDisksWithName(name: volume.name, recreate: false))
+                    self.viewStore.send(.ejectSpeedyDisk(volumeId: volume.id, recreate: false))
                 }
                 self.statusMenu.cancelTracking()
             }, deleteHandler: {

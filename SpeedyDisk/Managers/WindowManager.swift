@@ -71,11 +71,11 @@ class WindowManager: NSObject, NSWindowDelegate {
     
     func showSpeedyDiskManagerWindow() {
         NSApplication.shared.activate(ignoringOtherApps: true)
-        viewStore.send(.prepareForEdit)
+        viewStore.send(.prepareToShowSpeedyDiskManagerWindow)
         
         if sppeedyDiskManagerWindow == nil {
             let contentView = SpeedyDiskManagerView(store: store)
-            let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 825, minHeight: 215))
+            let hostingCtrl = NSHostingController(rootView: contentView.frame(minWidth: 890, minHeight: 215))
             let window = NSWindow(contentViewController: hostingCtrl)
             window.title = Constants.speedyDiskManager
             sppeedyDiskManagerWindow = NSWindowController(window: window)

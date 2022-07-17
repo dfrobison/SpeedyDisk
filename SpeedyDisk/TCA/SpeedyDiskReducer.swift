@@ -30,7 +30,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                 return .none
             }
             
-            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: false))
+            return Effect<SpeedyDiskAction, Never>(value: .deleteVolume(volumeId: volumeId))
             
         case .confirmEjectTapped(let volumeId):
             guard let volume = SpeedyDiskManager.shared.getVolume(volumeId: volumeId) else {

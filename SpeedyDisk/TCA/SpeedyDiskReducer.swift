@@ -72,7 +72,7 @@ let speedyDiskReducer = Reducer<SpeedyDiskState, SpeedyDiskAction, SpeedyDiskEnv
                 return .none
             }
             
-            return Effect<SpeedyDiskAction, Never>(value: .ejectSpeedyDisk(volumeId: volume.id, recreate: true))
+            return Effect<SpeedyDiskAction, Never>(value: .recreateVolume(volumeId: volume.id))
 
             
         case .speedyDiskMounted:
